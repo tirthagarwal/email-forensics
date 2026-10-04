@@ -68,12 +68,22 @@ class RemoteForensicHandler(BaseHTTPRequestHandler):
     """HTTP request handler for remote forensic analysis."""
 
     def _send_cors_headers(self):
+        allowed_origin_env = os.environ.get("CORS_ORIGIN", "*")
         origin = self.headers.get("Origin")
-        if origin:
-            self.send_header("Access-Control-Allow-Origin", origin)
-            self.send_header("Vary", "Origin")
+        if allowed_origin_env != "*":
+            # Strict origin matching
+            if origin and (origin == allowed_origin_env or origin.endswith(".vercel.app")):
+                self.send_header("Access-Control-Allow-Origin", origin)
+                self.send_header("Vary", "Origin")
+            else:
+                self.send_header("Access-Control-Allow-Origin", allowed_origin_env)
         else:
-            self.send_header("Access-Control-Allow-Origin", "*")
+            if origin:
+                self.send_header("Access-Control-Allow-Origin", origin)
+                self.send_header("Vary", "Origin")
+            else:
+                self.send_header("Access-Control-Allow-Origin", "*")
+
         self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
         req_headers = self.headers.get(
             "Access-Control-Request-Headers",
@@ -191,6 +201,19 @@ class RemoteForensicHandler(BaseHTTPRequestHandler):
                     for sec in sections:
                         if b"filename=" in sec and b"\r\n\r\n" in sec:
                             head, file_data = sec.split(b"\r\n\r\n", 1)
+                            # Extract safe filename from Content-Disposition
+                            for line in head.split(b"\r\n"):
+                                if b"filename=" in line:
+                                    try:
+                                        raw_fn = line.split(b"filename=")[1].strip().strip(b'"\'').decode("utf-8", errors="ignore")
+                                        # Strict basename to prevent path traversal
+                                        safe_name = os.path.basename(raw_fn).strip()
+                                        if safe_name:
+                                            filename = safe_name
+                                    except Exception:
+                                        filename = "uploaded.pcap"
+                                    break
+
                             # Strip trailing boundary artifacts
                             if file_data.endswith(b"\r\n"):
                                 file_data = file_data[:-2]
@@ -236,6 +259,10 @@ class RemoteForensicHandler(BaseHTTPRequestHandler):
 
                 # Execute forensic pipeline
                 report = analyze_pcap_files([temp_pcap], zeek_cache_dir)
+
+                # Sanitize private filesystem paths from client response
+                if isinstance(report, dict) and "pcap" in report and "files_analyzed" in report["pcap"]:
+                    report["pcap"]["files_analyzed"] = [filename]
 
                 # Return result
                 self._send_json_response(200, report)

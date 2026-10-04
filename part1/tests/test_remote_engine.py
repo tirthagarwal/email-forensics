@@ -148,6 +148,87 @@ class TestRemoteEngine(unittest.TestCase):
         self.assertEqual(finding["rule_id"], "CERT_SELF_SIGNED")
         self.assertEqual(finding["severity"], "MEDIUM")
 
+    def test_analyze_with_imap_fixture(self):
+        pcap_path = PART1_DIR / "pcaps" / "imap_starttls_real.pcap"
+        self.assertTrue(pcap_path.exists())
+        pcap_bytes = pcap_path.read_bytes()
+        boundary = "---------------------------imap123456"
+        multipart_body = (
+            f"--{boundary}\r\n"
+            f'Content-Disposition: form-data; name="file"; filename="imap_starttls_real.pcap"\r\n'
+            f"Content-Type: application/vnd.tcpdump.pcap\r\n\r\n"
+        ).encode("utf-8") + pcap_bytes + f"\r\n--{boundary}--\r\n".encode("utf-8")
+
+        req = (
+            f"POST /analyze HTTP/1.1\r\n"
+            f"Host: localhost\r\n"
+            f"Content-Type: multipart/form-data; boundary={boundary}\r\n"
+            f"Content-Length: {len(multipart_body)}\r\n"
+            f"Connection: close\r\n\r\n"
+        ).encode("utf-8") + multipart_body
+
+        status, headers, body = dispatch_request(req)
+        self.assertEqual(status, 200)
+        report = json.loads(body.decode("utf-8"))
+        self.assertEqual(report["summary"]["total_sessions"], 1)
+        self.assertEqual(report["email_sessions"][0]["protocol"], "IMAP")
+        self.assertEqual(report["summary"]["overall_risk_score"], 35.0)
+        self.assertEqual(report["summary"]["risk_level"], "LOW")
+
+    def test_analyze_with_pop3_fixture(self):
+        pcap_path = PART1_DIR / "pcaps" / "pop3_stls_real.pcap"
+        self.assertTrue(pcap_path.exists())
+        pcap_bytes = pcap_path.read_bytes()
+        boundary = "---------------------------pop3123456"
+        multipart_body = (
+            f"--{boundary}\r\n"
+            f'Content-Disposition: form-data; name="file"; filename="pop3_stls_real.pcap"\r\n'
+            f"Content-Type: application/vnd.tcpdump.pcap\r\n\r\n"
+        ).encode("utf-8") + pcap_bytes + f"\r\n--{boundary}--\r\n".encode("utf-8")
+
+        req = (
+            f"POST /analyze HTTP/1.1\r\n"
+            f"Host: localhost\r\n"
+            f"Content-Type: multipart/form-data; boundary={boundary}\r\n"
+            f"Content-Length: {len(multipart_body)}\r\n"
+            f"Connection: close\r\n\r\n"
+        ).encode("utf-8") + multipart_body
+
+        status, headers, body = dispatch_request(req)
+        self.assertEqual(status, 200)
+        report = json.loads(body.decode("utf-8"))
+        self.assertEqual(report["summary"]["total_sessions"], 1)
+        self.assertEqual(report["email_sessions"][0]["protocol"], "POP3")
+        self.assertEqual(report["summary"]["overall_risk_score"], 35.0)
+        self.assertEqual(report["summary"]["risk_level"], "LOW")
+
+    def test_analyze_with_plaintext_smtp_fixture(self):
+        pcap_path = PART1_DIR / "pcaps" / "smtp_test.pcap"
+        self.assertTrue(pcap_path.exists())
+        pcap_bytes = pcap_path.read_bytes()
+        boundary = "---------------------------smtptest123"
+        multipart_body = (
+            f"--{boundary}\r\n"
+            f'Content-Disposition: form-data; name="file"; filename="smtp_test.pcap"\r\n'
+            f"Content-Type: application/vnd.tcpdump.pcap\r\n\r\n"
+        ).encode("utf-8") + pcap_bytes + f"\r\n--{boundary}--\r\n".encode("utf-8")
+
+        req = (
+            f"POST /analyze HTTP/1.1\r\n"
+            f"Host: localhost\r\n"
+            f"Content-Type: multipart/form-data; boundary={boundary}\r\n"
+            f"Content-Length: {len(multipart_body)}\r\n"
+            f"Connection: close\r\n\r\n"
+        ).encode("utf-8") + multipart_body
+
+        status, headers, body = dispatch_request(req)
+        self.assertEqual(status, 200)
+        report = json.loads(body.decode("utf-8"))
+        self.assertEqual(report["summary"]["total_sessions"], 1)
+        self.assertEqual(report["email_sessions"][0]["protocol"], "SMTP")
+        self.assertEqual(report["summary"]["overall_risk_score"], 20.0)
+        self.assertEqual(report["summary"]["risk_level"], "LOW")
+
     def test_invalid_pcap_header_rejected(self):
         fake_payload = b"THIS IS NOT A PCAP FILE AT ALL"
         req = (

@@ -35,6 +35,9 @@ interface SourceSelectorProps {
 
 const SENSOR_CANDIDATES = ['http://localhost:5001', 'http://127.0.0.1:5001']
 
+// Remote forensic engine (Cloud Run). Set NEXT_PUBLIC_FORENSIC_API_URL in Vercel env vars.
+const REMOTE_ENGINE_URL = (typeof process !== 'undefined' && process.env.NEXT_PUBLIC_FORENSIC_API_URL) || ''
+
 export default function SourceSelector({ onRun }: SourceSelectorProps) {
   const [sourceType, setSourceType] = useState<SourceType | null>(null)
   const [batchChecked, setBatchChecked] = useState<string[]>([...BATCH_PCAPS])
@@ -94,8 +97,11 @@ export default function SourceSelector({ onRun }: SourceSelectorProps) {
     checkSensor()
   }, [checkSensor])
 
+  // Remote mode is available when Cloud Run URL is configured and local sensor is offline
+  const remoteAvailable = !!REMOTE_ENGINE_URL && sensorStatus === 'offline'
+
   const isReady =
-    sensorStatus === 'online' &&
+    (sensorStatus === 'online' || remoteAvailable) &&
     (sourceType === 'batch'
       ? batchChecked.length > 0
       : sourceType === 'single'
@@ -106,12 +112,13 @@ export default function SourceSelector({ onRun }: SourceSelectorProps) {
 
   const handleRun = () => {
     if (!sourceType || !isReady) return
+    // Pass activeSensorUrl when local sensor is online; undefined triggers remote mode in index.tsx
     onRun({
       type: sourceType,
       batchFiles: sourceType === 'batch' ? batchChecked : undefined,
       singleFile: sourceType === 'single' ? singleFile : undefined,
       uploadedFile: sourceType === 'upload' ? (uploadedFile ?? undefined) : undefined,
-    }, activeSensorUrl)
+    }, sensorStatus === 'online' ? activeSensorUrl : undefined)
   }
 
   const toggleBatch = (name: string) => {
@@ -341,7 +348,31 @@ export default function SourceSelector({ onRun }: SourceSelectorProps) {
           </div>
         )}
 
-        {sensorStatus === 'offline' && permissionBlocked && (
+        {sensorStatus === 'offline' && remoteAvailable && (
+          <div className="flex items-center justify-between bg-blue/10 border border-blue/30 rounded-xl px-4 py-3">
+            <div className="flex items-center gap-2.5">
+              <span className="w-2.5 h-2.5 rounded-full bg-blue animate-pulse" />
+              <div>
+                <div className="text-xs font-semibold text-blue flex items-center gap-1.5">
+                  <CheckCircle2 className="w-3.5 h-3.5" />
+                  Remote Forensic Engine Available
+                </div>
+                <div className="text-[11px] font-mono text-text-muted mt-0.5">
+                  Analysis will run on Cloud Run — no local sensor required
+                </div>
+              </div>
+            </div>
+            <button
+              onClick={checkSensor}
+              title="Recheck local sensor"
+              className="text-text-muted hover:text-text-primary p-1.5 rounded-lg hover:bg-bg-surface border border-transparent hover:border-bg-border transition-all"
+            >
+              <RefreshCw className="w-3.5 h-3.5" />
+            </button>
+          </div>
+        )}
+
+        {sensorStatus === 'offline' && !remoteAvailable && permissionBlocked && (
           <div className="bg-amber/10 border border-amber/40 rounded-xl p-4 space-y-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2 text-amber font-semibold text-sm">
@@ -374,7 +405,7 @@ export default function SourceSelector({ onRun }: SourceSelectorProps) {
           </div>
         )}
 
-        {sensorStatus === 'offline' && !permissionBlocked && (
+        {sensorStatus === 'offline' && !remoteAvailable && !permissionBlocked && (
           <div className="bg-amber/10 border border-amber/30 rounded-xl p-4 space-y-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2 text-amber font-semibold text-sm">
@@ -417,10 +448,14 @@ export default function SourceSelector({ onRun }: SourceSelectorProps) {
           )}
         >
           <Play className="w-5 h-5" />
-          {sensorStatus === 'offline'
-            ? '▶ Run Forensic Analysis (Local Sensor Offline)'
-            : sensorStatus === 'checking'
+          {sensorStatus === 'checking'
             ? 'Connecting to Sensor…'
+            : remoteAvailable && !sourceType
+            ? '▶ Run Remote Forensic Analysis (Select Source Above)'
+            : remoteAvailable
+            ? '▶ Run Remote Forensic Analysis'
+            : sensorStatus === 'offline'
+            ? '▶ Run Forensic Analysis (Local Sensor Offline)'
             : !sourceType
             ? '▶ Run Forensic Analysis (Select Source Above)'
             : '▶ Run Forensic Analysis'}
