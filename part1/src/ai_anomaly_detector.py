@@ -101,19 +101,23 @@ class AIAnomalyDetector:
         schema_path    = variant_dir / "deployment_feature_schema.json"
         metadata_path  = variant_dir / "deployment_training_metadata.json"
 
-        missing = [
-            str(p) for p in [model_path, threshold_path, schema_path]
+        missing_meta = [
+            str(p) for p in [threshold_path, schema_path]
             if not p.exists()
         ]
-        if missing:
+        if missing_meta:
             raise RuntimeError(
-                f"[AIAnomalyDetector] Deployment ML artifacts not found for '{self.model_variant}':\n"
-                + "\n".join(f"  {m}" for m in missing)
+                f"[AIAnomalyDetector] Deployment ML metadata artifacts not found for '{self.model_variant}':\n"
+                + "\n".join(f"  {m}" for m in missing_meta)
                 + f"\n\nRun the training script first:\n  {TRAIN_COMMAND}"
             )
 
         import joblib
-        self._model = joblib.load(model_path)
+        if model_path.exists():
+            self._model = joblib.load(model_path)
+        else:
+            self._model = None
+            self._integrity_status = "ARTIFACT_UNAVAILABLE"
 
         with open(threshold_path) as f:
             thresh_data = json.load(f)
@@ -132,28 +136,31 @@ class AIAnomalyDetector:
 
         # Optional SHA-256 verification
         if verify_integrity and self._artifact_hashes:
-            current_model_sha = compute_file_sha256(model_path)
-            expected_model_sha = self._artifact_hashes.get("deployment_isolation_forest.joblib")
-
-            current_thresh_sha = compute_file_sha256(threshold_path)
-            expected_thresh_sha = self._artifact_hashes.get("deployment_threshold.json")
-
-            current_schema_sha = compute_file_sha256(schema_path)
-            expected_schema_sha = self._artifact_hashes.get("deployment_feature_schema.json")
-
-            mismatch = []
-            if expected_model_sha and current_model_sha != expected_model_sha:
-                mismatch.append(f"Model file digest mismatch: {current_model_sha[:12]} != {expected_model_sha[:12]}")
-            if expected_thresh_sha and current_thresh_sha != expected_thresh_sha:
-                mismatch.append(f"Threshold file digest mismatch: {current_thresh_sha[:12]} != {expected_thresh_sha[:12]}")
-            if expected_schema_sha and current_schema_sha != expected_schema_sha:
-                mismatch.append(f"Schema file digest mismatch: {current_schema_sha[:12]} != {expected_schema_sha[:12]}")
-
-            if mismatch:
-                self._integrity_status = "TAMPERED / MISMATCH"
-                print(f"[AIAnomalyDetector Warning] Artifact integrity verification failure: {'; '.join(mismatch)}")
+            if not model_path.exists():
+                self._integrity_status = "ARTIFACT_UNAVAILABLE"
             else:
-                self._integrity_status = "VERIFIED_OK"
+                current_model_sha = compute_file_sha256(model_path)
+                expected_model_sha = self._artifact_hashes.get("deployment_isolation_forest.joblib")
+
+                current_thresh_sha = compute_file_sha256(threshold_path)
+                expected_thresh_sha = self._artifact_hashes.get("deployment_threshold.json")
+
+                current_schema_sha = compute_file_sha256(schema_path)
+                expected_schema_sha = self._artifact_hashes.get("deployment_feature_schema.json")
+
+                mismatch = []
+                if expected_model_sha and current_model_sha != expected_model_sha:
+                    mismatch.append(f"Model file digest mismatch: {current_model_sha[:12]} != {expected_model_sha[:12]}")
+                if expected_thresh_sha and current_thresh_sha != expected_thresh_sha:
+                    mismatch.append(f"Threshold file digest mismatch: {current_thresh_sha[:12]} != {expected_thresh_sha[:12]}")
+                if expected_schema_sha and current_schema_sha != expected_schema_sha:
+                    mismatch.append(f"Schema file digest mismatch: {current_schema_sha[:12]} != {expected_schema_sha[:12]}")
+
+                if mismatch:
+                    self._integrity_status = "TAMPERED / MISMATCH"
+                    print(f"[AIAnomalyDetector Warning] Artifact integrity verification failure: {'; '.join(mismatch)}")
+                else:
+                    self._integrity_status = "VERIFIED_OK"
         elif not verify_integrity:
             self._integrity_status = "INTEGRITY_CHECK_DISABLED"
 
@@ -187,6 +194,25 @@ class AIAnomalyDetector:
         """
         feat_dict = self._extract_deployment_features_from_crypto(crypto_features)
         feature_names = self._schema.get("feature_names", [])
+
+        if self._model is None:
+            return {
+                "model_name":             self.model_name,
+                "model_version":          self.model_version,
+                "feature_schema_version": self._feature_schema_version,
+                "raw_score":              None,
+                "anomaly_score":          None,
+                "ml_anomaly_score":       None,
+                "threshold":              round(self._threshold, 6) if self._threshold is not None else None,
+                "is_anomaly":             False,
+                "feature_values_used":    {k: round(v, 4) for k, v in feat_dict.items()},
+                "training_source":        "PCAP/Zeek deployment corpus",
+                "integrity_status":       self._integrity_status,
+                "evaluation_status":      "Production ML model artifact unavailable. Unsupervised anomaly detection bypassed.",
+                "explanation":            "Documented production IsolationForest model artifact is unavailable from storage. Deterministic security rules active.",
+                "anomalous_features":     [],
+            }
+
         x_vec = np.array([[feat_dict.get(n, 0.0) for n in feature_names]])
 
         raw_score = float(self._model.decision_function(x_vec)[0])

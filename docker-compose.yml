@@ -1,0 +1,20 @@
+version: '3.8'
+
+services:
+  remote-engine:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: email-forensics-remote-engine:latest
+    container_name: email-forensics-remote-engine
+    ports:
+      - "8000:8000"
+    environment:
+      - PORT=8000
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "python3", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:8000/ping')"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 5s

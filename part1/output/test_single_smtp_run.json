@@ -1,0 +1,514 @@
+{
+    "report_metadata": {
+        "framework_name": "AI-Assisted Passive Network Forensic Framework for Email Cryptographic Security Posture Assessment",
+        "version": "1.0.0",
+        "generated_at": "2026-10-04T05:39:08Z",
+        "tls_keylog_supplied": false,
+        "tls_keylog_decryption_status": "NOT_APPLICABLE"
+    },
+    "pcap": {
+        "total_pcaps": 1,
+        "files_analyzed": [
+            "part1/pcaps/smtp_starttls_real.pcap"
+        ],
+        "analyzed_at": "2026-10-04T05:39:08Z",
+        "total_connections": 1
+    },
+    "summary": {
+        "total_pcaps": 1,
+        "total_sessions": 1,
+        "total_findings": 1,
+        "baseline_score": 0.0,
+        "cryptographic_score": 15.0,
+        "overall_risk_score": 15.0,
+        "score_delta": 15.0,
+        "risk_level": "MINIMAL",
+        "total_ml_anomalies": 0
+    },
+    "security_assessment": {
+        "baseline_score": 0.0,
+        "cryptographic_score": 15.0,
+        "final_score": 15.0,
+        "score_delta": 15.0,
+        "controls": [
+            {
+                "control_id": "CTRL_EMAIL_PROTOCOL",
+                "category": "EMAIL_PROTOCOL",
+                "name": "Email Protocol Identification",
+                "observed": "Observed Protocols: SMTP",
+                "expected": "SMTP, IMAP, or POP3 protocol traffic",
+                "status": "PASS",
+                "status_symbol": "\u2713 PASS",
+                "severity": "INFO",
+                "why": "Email transport and retrieval protocol traffic successfully parsed from network capture.",
+                "evidence": "Total email sessions identified: 1 across protocols SMTP",
+                "recommendation": "Maintain continuous network monitoring on standard email ports.",
+                "score_contribution": 0
+            },
+            {
+                "control_id": "CTRL_STARTTLS",
+                "category": "TRANSPORT_SECURITY",
+                "name": "STARTTLS / STLS Upgrade Enforcement",
+                "observed": "All cleartext email sessions successfully negotiated STARTTLS / STLS upgrade",
+                "expected": "STARTTLS / STLS Upgrade Enforced on All Cleartext Connections",
+                "status": "PASS",
+                "status_symbol": "\u2713 PASS",
+                "severity": "INFO",
+                "why": "All observed sessions upgraded from cleartext to TLS encryption.",
+                "evidence": "Analyzed 1 email session(s); no unencrypted STARTTLS bypasses observed.",
+                "recommendation": "Maintain strict STARTTLS/STLS enforcement policy.",
+                "score_contribution": 0
+            },
+            {
+                "control_id": "CTRL_PLAINTEXT_AUTH",
+                "category": "TRANSPORT_SECURITY",
+                "name": "Plaintext Authentication Protection",
+                "observed": "No authentication commands transmitted in cleartext",
+                "expected": "Authentication Commands Restricted to TLS Encrypted Sessions",
+                "status": "PASS",
+                "status_symbol": "\u2713 PASS",
+                "severity": "INFO",
+                "why": "No unencrypted authentication attempts were detected.",
+                "evidence": "All authentication commands occurred within encrypted TLS sessions.",
+                "recommendation": "Continue restricting AUTH commands to encrypted channels.",
+                "score_contribution": 0
+            },
+            {
+                "control_id": "CTRL_TLS_VERSION",
+                "category": "TLS_CONFIGURATION",
+                "name": "TLS Protocol Version Compliance",
+                "observed": "Modern TLS Version Negotiated (TLSv12)",
+                "expected": "TLS 1.2 or TLS 1.3",
+                "status": "PASS",
+                "status_symbol": "\u2713 PASS",
+                "severity": "INFO",
+                "why": "Session negotiated recommended TLS version (TLS 1.2 or TLS 1.3).",
+                "evidence": "Observed TLS versions: TLSv12",
+                "recommendation": "Maintain TLS 1.2+ minimum protocol requirement.",
+                "score_contribution": 0
+            },
+            {
+                "control_id": "CTRL_CIPHER_SUITE",
+                "category": "CRYPTOGRAPHY",
+                "name": "Cipher Suite Security",
+                "observed": "Strong Cipher Suite Negotiated (TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384)",
+                "expected": "Strong AEAD Cipher Suites (AES-GCM / CHACHA20-POLY1305)",
+                "status": "PASS",
+                "status_symbol": "\u2713 PASS",
+                "severity": "INFO",
+                "why": "Negotiated cipher suite meets modern cryptographic standards.",
+                "evidence": "Observed ciphers: TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
+                "recommendation": "Maintain strong cipher ordering preferences.",
+                "score_contribution": 0
+            },
+            {
+                "control_id": "CTRL_FORWARD_SECRECY",
+                "category": "CRYPTOGRAPHY",
+                "name": "Perfect Forward Secrecy (PFS)",
+                "observed": "Ephemeral Key Exchange (ECDHE/DHE) Negotiated (1/1 TLS sessions)",
+                "expected": "Ephemeral Key Exchange (ECDHE or DHE)",
+                "status": "PASS",
+                "status_symbol": "\u2713 PASS",
+                "severity": "INFO",
+                "why": "Perfect Forward Secrecy (PFS) is active, protecting past communications from decryption.",
+                "evidence": "ECDHE/DHE observed on 1 session(s).",
+                "recommendation": "Maintain Ephemeral Diffie-Hellman key exchange preference.",
+                "score_contribution": 0
+            },
+            {
+                "control_id": "CTRL_ELLIPTIC_CURVE",
+                "category": "CRYPTOGRAPHY",
+                "name": "Elliptic Curve Selection",
+                "observed": "Elliptic Curve: x25519",
+                "expected": "Standardized Curves (x25519, secp256r1, secp384r1)",
+                "status": "PASS",
+                "status_symbol": "\u2713 PASS",
+                "severity": "INFO",
+                "why": "Standardized curves provide performance and resistance against side-channel attacks.",
+                "evidence": "Observed elliptic curve parameters: x25519",
+                "recommendation": "Maintain Curve25519 and P-256 support.",
+                "score_contribution": 0
+            },
+            {
+                "control_id": "CTRL_CERT_TRUST",
+                "category": "CERTIFICATE_SECURITY",
+                "name": "Certificate Trust & Authority",
+                "observed": "Self-Signed Certificate in Use (1 cert(s))",
+                "expected": "Certificate Issued by Recognized Public or Enterprise CA",
+                "status": "WARNING",
+                "status_symbol": "\u26a0 WARNING",
+                "severity": "MEDIUM",
+                "why": "Self-signed certificates cannot be validated by standard public trust stores, introducing trust ambiguity for external mail clients.",
+                "evidence": "Evidence: Certificate subject 'CN=mail.example.local,OU=Security,O=EmailForensicsTest,L=SanFrancisco,ST=California,C=US' matches issuer.",
+                "recommendation": "Deploy certificates issued by a trusted enterprise or public Certificate Authority.",
+                "score_contribution": 15
+            },
+            {
+                "control_id": "CTRL_CERT_VALIDITY",
+                "category": "CERTIFICATE_SECURITY",
+                "name": "Certificate Lifetime & Expiration",
+                "observed": "Certificate Currently Active & Valid (approximately 357.02 days remaining)",
+                "expected": "Active Certificate Within Valid Lifetime",
+                "status": "PASS",
+                "status_symbol": "\u2713 PASS",
+                "severity": "INFO",
+                "why": "Certificate activation timestamp is valid and expiration date is in the future.",
+                "evidence": "Inspected 1 certificate(s); all within valid lifetime.",
+                "recommendation": "Automate certificate renewal before expiration.",
+                "score_contribution": 0
+            },
+            {
+                "control_id": "CTRL_CERT_HOSTNAME",
+                "category": "CERTIFICATE_SECURITY",
+                "name": "Certificate Hostname & SNI Alignment",
+                "observed": "mail.example.local \u2192 MATCH (Server SNI Matches Certificate Subject / SAN)",
+                "expected": "Target Server FQDN Matches Certificate SAN / Subject",
+                "status": "PASS",
+                "status_symbol": "\u2713 PASS",
+                "severity": "INFO",
+                "why": "Target hostname matches certificate subject name.",
+                "evidence": "Validated hostname match for 1 certificate session(s).",
+                "recommendation": "Maintain SNI alignment on load balancers and mail servers.",
+                "score_contribution": 0
+            },
+            {
+                "control_id": "CTRL_CERT_KEY_SIZE",
+                "category": "CERTIFICATE_SECURITY",
+                "name": "Public Key Size Compliance",
+                "observed": "Sufficient Public Key Length (RSA 2048)",
+                "expected": "RSA >= 2048-bit or ECC >= 256-bit",
+                "status": "PASS",
+                "status_symbol": "\u2713 PASS",
+                "severity": "INFO",
+                "why": "Public key size satisfies modern NIST cryptographic guidelines.",
+                "evidence": "Verified public key sizes: RSA 2048",
+                "recommendation": "Maintain 2048-bit minimum key size policy.",
+                "score_contribution": 0
+            },
+            {
+                "control_id": "CTRL_CERT_SIG_ALG",
+                "category": "CERTIFICATE_SECURITY",
+                "name": "Signature Algorithm Security",
+                "observed": "Strong Signature Algorithm (sha256WithRSAEncryption)",
+                "expected": "SHA-256, SHA-384, or SHA-512",
+                "status": "PASS",
+                "status_symbol": "\u2713 PASS",
+                "severity": "INFO",
+                "why": "Certificate signature algorithm satisfies modern security baselines.",
+                "evidence": "Inspected signature algorithms: sha256WithRSAEncryption",
+                "recommendation": "Maintain SHA-256+ signature algorithm policy.",
+                "score_contribution": 0
+            },
+            {
+                "control_id": "CTRL_FINGERPRINTING",
+                "category": "FINGERPRINTING",
+                "name": "TLS Client / Server Fingerprinting (JA3 / JA4)",
+                "observed": "NOT AVAILABLE IN CAPTURE (Optional Zeek Fingerprint Package Not Installed)",
+                "expected": "JA3 / JA3S / JA4 Fingerprint String for Client/Server Profiling",
+                "status": "NOT OBSERVED",
+                "status_symbol": "\u2014 NOT OBSERVED",
+                "severity": "INFO",
+                "why": "JA3 and JA4 fingerprinting require optional Zeek package extensions which were not active during capture logging.",
+                "evidence": "Fields ja3: null, ja3s: null, ja4: null, ja4s: null across all captured sessions.",
+                "recommendation": "If client fingerprinting is required, install zeek-ja3 or zeek-ja4 packages in the Zeek deployment.",
+                "score_contribution": 0
+            }
+        ],
+        "violations": [
+            {
+                "control_id": "CTRL_CERT_TRUST",
+                "category": "CERTIFICATE_SECURITY",
+                "name": "Certificate Trust & Authority",
+                "observed": "Self-Signed Certificate in Use (1 cert(s))",
+                "expected": "Certificate Issued by Recognized Public or Enterprise CA",
+                "status": "WARNING",
+                "status_symbol": "\u26a0 WARNING",
+                "severity": "MEDIUM",
+                "why": "Self-signed certificates cannot be validated by standard public trust stores, introducing trust ambiguity for external mail clients.",
+                "evidence": "Evidence: Certificate subject 'CN=mail.example.local,OU=Security,O=EmailForensicsTest,L=SanFrancisco,ST=California,C=US' matches issuer.",
+                "recommendation": "Deploy certificates issued by a trusted enterprise or public Certificate Authority.",
+                "score_contribution": 15
+            }
+        ],
+        "risk_contributors": [
+            {
+                "rule_id": "CERT_SELF_SIGNED",
+                "title": "Self-Signed Certificate in Use",
+                "points_added": 15,
+                "occurrences": 1
+            }
+        ]
+    },
+    "connections": [
+        {
+            "uid": "COadocMa6ijvIt5L2",
+            "pcap_source": "part1/pcaps/smtp_starttls_real.pcap",
+            "source": "192.168.1.50:54321",
+            "destination": "192.168.1.20:25",
+            "protocol": "tcp",
+            "service": "smtp,ssl",
+            "duration_seconds": 0.3,
+            "client_bytes": 410,
+            "server_bytes": 1776,
+            "conn_state": "SF"
+        }
+    ],
+    "email_sessions": [
+        {
+            "uid": "COadocMa6ijvIt5L2",
+            "protocol": "SMTP",
+            "encryption_mode": "STARTTLS_ACCEPTED",
+            "starttls_attempted": true,
+            "starttls_accepted": true,
+            "implicit_tls": false,
+            "tls_established": true,
+            "authentication_observed": false,
+            "plaintext_auth_risk": false,
+            "extracted_commands": [],
+            "tls_version": "TLSv12",
+            "cipher_suite": "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
+            "ml_anomaly_score": null
+        }
+    ],
+    "tls_sessions": [
+        {
+            "uid": "COadocMa6ijvIt5L2",
+            "version": "TLSv12",
+            "cipher": "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
+            "curve": "x25519",
+            "server_name": "mail.example.local",
+            "established": true,
+            "validation_status": "self signed certificate",
+            "sni_matches_cert": true
+        }
+    ],
+    "certificates": [
+        {
+            "fingerprint_sha256": "43a06b5986d1a0e94e00caa1f2f120bd464551afc8152e48e5096bafb684e0e8",
+            "subject": "CN=mail.example.local,OU=Security,O=EmailForensicsTest,L=SanFrancisco,ST=California,C=US",
+            "issuer": "CN=mail.example.local,OU=Security,O=EmailForensicsTest,L=SanFrancisco,ST=California,C=US",
+            "serial": "B918EB6DFE9D1412",
+            "key_length": 2048,
+            "key_algorithm": "rsaEncryption",
+            "signature_algorithm": "sha256WithRSAEncryption"
+        }
+    ],
+    "cryptographic_features": [
+        {
+            "uid": "COadocMa6ijvIt5L2",
+            "protocol": "SMTP",
+            "starttls_detected": true,
+            "starttls_accepted": true,
+            "implicit_tls": false,
+            "tls_established": true,
+            "authentication_observed": false,
+            "plaintext_auth_risk": false,
+            "server_name": "mail.example.local",
+            "tls_version": "TLSv12",
+            "cipher_suite": "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
+            "elliptic_curve": "x25519",
+            "key_exchange": "ECDHE/DHE",
+            "forward_secrecy_indicator": true,
+            "weak_tls_version": false,
+            "weak_cipher": false,
+            "weak_key_exchange": false,
+            "weak_curve": false,
+            "certificate_visibility_status": "OBSERVED",
+            "certificate_visibility_reason": "Certificate fields extracted from X.509 evidence",
+            "certificate_public_key_algorithm": "rsaEncryption",
+            "certificate_signature_algorithm": "sha256WithRSAEncryption",
+            "certificate_key_size": 2048,
+            "weak_key_size": false,
+            "weak_signature_algorithm": false,
+            "certificate_self_signed": true,
+            "certificate_expired": false,
+            "certificate_not_yet_valid": false,
+            "certificate_days_remaining": 357.02,
+            "certificate_hostname_match": true,
+            "certificate_problem": true,
+            "missing_starttls": false,
+            "failed_starttls": false,
+            "deprecated_crypto": false,
+            "ja3": null,
+            "ja3s": null,
+            "ja4": null,
+            "ja4s": null,
+            "_client_bytes": 410,
+            "_server_bytes": 1776,
+            "_client_packets": 17,
+            "_server_packets": 15,
+            "_duration": 0.3
+        }
+    ],
+    "findings": [
+        {
+            "rule_id": "CERT_SELF_SIGNED",
+            "severity": "MEDIUM",
+            "title": "Self-Signed Certificate in Use",
+            "description": "Server certificate subject matches issuer and is not signed by a trusted Certificate Authority.",
+            "evidence": "Certificate subject 'CN=mail.example.local,OU=Security,O=EmailForensicsTest,L=SanFrancisco,ST=California,C=US' matches issuer.",
+            "affected_connection": "192.168.1.50:54321 -> 192.168.1.20:25 (UID: COadocMa6ijvIt5L2)",
+            "affected_protocol": "SMTP",
+            "confidence": "HIGH",
+            "security_impact": "Clients cannot verify server identity, exposing connections to Man-in-the-Middle (MITM) spoofing.",
+            "references": [
+                "RFC 5280 (X.509 PKI Profile)",
+                "CWE-295 (Improper Certificate Validation)"
+            ],
+            "recommendation": "Replace self-signed certificate with an X.509 certificate issued by a trusted public CA (e.g. Let's Encrypt) or internal enterprise PKI.",
+            "technical_remediation": "Replace self-signed certificate with an X.509 certificate issued by a trusted public CA (e.g. Let's Encrypt) or internal enterprise PKI."
+        }
+    ],
+    "finding_groups": {
+        "Certificate Trust & Validation": [
+            {
+                "rule_id": "CERT_SELF_SIGNED",
+                "severity": "MEDIUM",
+                "title": "Self-Signed Certificate in Use",
+                "description": "Server certificate subject matches issuer and is not signed by a trusted Certificate Authority.",
+                "evidence": "Certificate subject 'CN=mail.example.local,OU=Security,O=EmailForensicsTest,L=SanFrancisco,ST=California,C=US' matches issuer.",
+                "affected_connection": "192.168.1.50:54321 -> 192.168.1.20:25 (UID: COadocMa6ijvIt5L2)",
+                "affected_protocol": "SMTP",
+                "confidence": "HIGH",
+                "security_impact": "Clients cannot verify server identity, exposing connections to Man-in-the-Middle (MITM) spoofing.",
+                "references": [
+                    "RFC 5280 (X.509 PKI Profile)",
+                    "CWE-295 (Improper Certificate Validation)"
+                ],
+                "recommendation": "Replace self-signed certificate with an X.509 certificate issued by a trusted public CA (e.g. Let's Encrypt) or internal enterprise PKI.",
+                "technical_remediation": "Replace self-signed certificate with an X.509 certificate issued by a trusted public CA (e.g. Let's Encrypt) or internal enterprise PKI."
+            }
+        ]
+    },
+    "risk_assessment": {
+        "overall_risk_score": 15.0,
+        "risk_level": "MINIMAL",
+        "max_session_score": 15,
+        "average_session_score": 15.0,
+        "contributors": [
+            {
+                "rule_id": "CERT_SELF_SIGNED",
+                "title": "Self-Signed Certificate in Use",
+                "points_added": 15,
+                "occurrences": 1
+            }
+        ]
+    },
+    "ml_analysis": {
+        "model_name": "IsolationForest",
+        "model_version": "3.0.0",
+        "feature_schema_version": "1.0.0",
+        "total_anomalies_detected": 0,
+        "results": [
+            {
+                "model_name": "IsolationForest",
+                "model_version": "3.0.0",
+                "feature_schema_version": "1.0.0",
+                "raw_score": null,
+                "anomaly_score": null,
+                "ml_anomaly_score": null,
+                "threshold": -0.041466,
+                "is_anomaly": false,
+                "feature_values_used": {
+                    "client_bytes_log": 6.0186,
+                    "server_bytes_log": 7.4827,
+                    "client_packets_log": 2.8904,
+                    "server_packets_log": 2.7726,
+                    "duration_log": 0.2624,
+                    "bytes_ratio": 0.2307,
+                    "packets_ratio": 1.0625,
+                    "certificate_key_size_scaled": 0.5,
+                    "tls_established_flag": 1.0,
+                    "forward_secrecy_flag": 1.0,
+                    "protocol_cat__SMTP": 1.0,
+                    "protocol_cat__IMAP": 0.0,
+                    "protocol_cat__POP3": 0.0,
+                    "protocol_cat__UNKNOWN": 0.0,
+                    "tls_version_cat__TLSv13": 0.0,
+                    "tls_version_cat__TLSv12": 1.0,
+                    "tls_version_cat__TLSv11": 0.0,
+                    "tls_version_cat__TLSv10": 0.0,
+                    "tls_version_cat__SSLv3": 0.0,
+                    "tls_version_cat__UNKNOWN": 0.0,
+                    "cipher_suite_cat__TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384": 1.0,
+                    "cipher_suite_cat__TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256": 0.0,
+                    "cipher_suite_cat__TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384": 0.0,
+                    "cipher_suite_cat__TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256": 0.0,
+                    "cipher_suite_cat__TLS_AES_256_GCM_SHA384": 0.0,
+                    "cipher_suite_cat__TLS_AES_128_GCM_SHA256": 0.0,
+                    "cipher_suite_cat__UNKNOWN": 0.0,
+                    "elliptic_curve_cat__x25519": 1.0,
+                    "elliptic_curve_cat__secp256r1": 0.0,
+                    "elliptic_curve_cat__secp384r1": 0.0,
+                    "elliptic_curve_cat__secp521r1": 0.0,
+                    "elliptic_curve_cat__UNKNOWN": 0.0
+                },
+                "training_source": "PCAP/Zeek deployment corpus",
+                "integrity_status": "ARTIFACT_UNAVAILABLE",
+                "evaluation_status": "Production ML model artifact unavailable. Unsupervised anomaly detection bypassed.",
+                "explanation": "Documented production IsolationForest model artifact is unavailable from storage. Deterministic security rules active.",
+                "anomalous_features": []
+            }
+        ]
+    },
+    "session_explanations": [
+        {
+            "session_uid": "COadocMa6ijvIt5L2",
+            "session_summary": "SMTP session from 192.168.1.50:54321 to 192.168.1.20:25",
+            "risk_score": 15,
+            "risk_level": "MINIMAL",
+            "ml_anomaly": false,
+            "ml_anomaly_score": null,
+            "why_suspicious": [
+                "Self-Signed Certificate in Use (MEDIUM)"
+            ],
+            "evidence_breakdown": [
+                "STARTTLS/STLS command negotiated.",
+                "TLS Version: TLSv12, Cipher: TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
+                "Certificate Subject: CN=mail.example.local,OU=Security,O=EmailForensicsTest,L=SanFrancisco,ST=California,C=US, Issuer: CN=mail.example.local,OU=Security,O=EmailForensicsTest,L=SanFrancisco,ST=California,C=US, Key Length: 2048 bits"
+            ],
+            "security_impact": "Clients cannot verify server identity, exposing connections to Man-in-the-Middle (MITM) spoofing.",
+            "recommended_action_plan": [
+                "Replace self-signed certificate with an X.509 certificate issued by a trusted public CA (e.g. Let's Encrypt) or internal enterprise PKI."
+            ]
+        }
+    ],
+    "recommendations": [
+        {
+            "priority_step": 1,
+            "rule_id": "CERT_SELF_SIGNED",
+            "severity": "MEDIUM",
+            "action_summary": "Self-Signed Certificate in Use",
+            "recommendation": "Replace self-signed certificate with an X.509 certificate issued by a trusted public CA (e.g. Let's Encrypt) or internal enterprise PKI."
+        }
+    ],
+    "enterprise_posture": {
+        "enterprise_risk_score": 15.0,
+        "enterprise_risk_level": "MINIMAL",
+        "total_email_sessions": 1,
+        "protocol_breakdown": {
+            "SMTP": 1
+        },
+        "tls_version_distribution": {
+            "TLSv12": 1
+        },
+        "cipher_suite_distribution": {
+            "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384": 1
+        },
+        "server_distribution": {
+            "192.168.1.20:25": 1
+        },
+        "certificate_distribution": {
+            "CN=mail.example.local,OU=Security,O=EmailForensicsTest,L=SanFrancisco,ST=California,C=US": 1
+        },
+        "top_affected_systems": [
+            {
+                "server": "192.168.1.20:25",
+                "finding_count": 1
+            }
+        ],
+        "recurring_weaknesses": [
+            "1 session(s) utilize self-signed X.509 certificates."
+        ]
+    }
+}

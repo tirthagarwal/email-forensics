@@ -1,0 +1,38 @@
+# Git & CI/CD
+.git
+.gitignore
+.github
+
+# Virtual Environments & Caches
+venv/
+env/
+.pytest_cache/
+**/__pycache__
+**/*.pyc
+**/*.pyo
+**/*.pyd
+
+# Frontend & Web Artifacts (Hosted on Vercel)
+web/
+.next/
+node_modules/
+.vercel/
+.vercel_config/
+
+# Local Sensor (Runs locally on-premise)
+local_sensor/
+
+# Output Reports and Cache Dirs
+part1/output/*
+!part1/output/.gitkeep
+part1/reports/*
+!part1/reports/.gitkeep
+
+# Sensitive Material & Keys
+*.key
+*.pem
+*.log
+
+# OS Metadata
+.DS_Store
+Thumbs.db
