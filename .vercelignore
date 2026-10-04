@@ -1,0 +1,42 @@
+# Virtual environments & caches
+venv/
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+node_modules/
+
+# Next.js build artifacts (static export is in web_static/)
+web/.next/
+web/out/
+web/node_modules/
+
+# Large training datasets (not needed at runtime)
+part1/datasets/
+part1/output/zeek_train_cache/
+part1/output/zeek_unseen_cache/
+part1/output/zeek_real_tls/
+part1/output/test_zeek_tls13/
+
+# Tests (not needed in container)
+part1/tests/
+
+# Docs (not needed in container)
+part1/docs/
+
+# Sensitive files
+*.key
+*.pem
+*.keylog
+*keylog*.txt
+
+# OS
+.DS_Store
+*.log
+
+# Git
+.git/
+
+# Docker (not needed by Vercel — it uses Dockerfile.vercel directly)
+Dockerfile
+docker-compose.yml

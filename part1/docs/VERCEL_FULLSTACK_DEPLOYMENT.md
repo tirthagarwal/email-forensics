@@ -156,8 +156,14 @@ The rollback tag points to commit `4a70726`.
 
 | | |
 |---|---|
-| **Vercel Project** | `emailforensics` |
-| **Production URL** | (set after deployment — see below) |
+| **Vercel Project** | `email-forensics` |
+| **Project ID** | `prj_57h8dTOxeee5uy3QNsK8f76GC47D` |
+| **Production URL** | `https://email-forensics-one.vercel.app` |
+| **Health Endpoint** | `https://email-forensics-one.vercel.app/health` |
+| **Analyze Endpoint**| `https://email-forensics-one.vercel.app/analyze` |
+| **Zeek Engine** | Version 9.0.0 (Native Debian 12 package) |
+| **Python Runtime** | 3.11.17 |
+| **Compute Type** | Vercel Fluid Compute Container |
 
 ---
 
