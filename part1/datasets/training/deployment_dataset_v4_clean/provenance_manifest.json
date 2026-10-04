@@ -1,0 +1,41 @@
+{
+  "dataset_version": "deployment_dataset_v4_clean",
+  "created_at": "2026-09-28T20:31:32.875988+00:00",
+  "retained_sources": [
+    {
+      "source_dataset": "passive_os",
+      "source_type": "PUBLIC_DATASET",
+      "source_record_count": 10894,
+      "retained_record_count": 10894,
+      "excluded_duplicate_count": 0,
+      "parent_dataset": null,
+      "derivation_method": "Primary public dataset extraction"
+    },
+    {
+      "source_dataset": "local_email_pcap",
+      "source_type": "LOCAL_PCAP",
+      "source_record_count": 4,
+      "retained_record_count": 4,
+      "excluded_duplicate_count": 0,
+      "parent_dataset": null,
+      "derivation_method": "Local controlled forensic PCAP extraction"
+    }
+  ],
+  "excluded_derived_sources": [
+    {
+      "source_dataset": "expanded_deployment_dataset",
+      "source_type": "DERIVED_DATASET",
+      "parent_sources": [
+        "passive_os",
+        "local_email_pcap"
+      ],
+      "raw_record_count": 10898,
+      "excluded_duplicate_count": 10898,
+      "reason": "Redundant representation of passive_os + local_email_pcap parent records."
+    }
+  ],
+  "total_raw_records": 21796,
+  "total_retained_records": 10898,
+  "total_excluded_duplicates": 10898,
+  "unresolved_provenance_count": 0
+}

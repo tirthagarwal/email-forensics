@@ -1,0 +1,45 @@
+{
+  "dataset_version": "db_dataset_test_gate_pass",
+  "creation_time": "2026-09-30T12:10:47.204973+00:00",
+  "source_datasets": [
+    "expanded_deployment_dataset"
+  ],
+  "record_count": 100,
+  "group_count": 100,
+  "feature_schema_version": "1.0.0",
+  "train_count": 70,
+  "validation_count": 15,
+  "test_count": 15,
+  "random_state": 42,
+  "group_strategy": "capture_source_hierarchy",
+  "missing_value_strategy": "documented_sentinels_zero_imputation",
+  "preprocessing": "log1p_and_standard_vocabulary_onehot",
+  "description": "Extracted from database for model test_gate_pass",
+  "summary": {
+    "total_samples": 100,
+    "total_groups": 100,
+    "train_samples": 70,
+    "train_groups": 70,
+    "train_sources": [
+      "expanded_deployment_dataset"
+    ],
+    "val_samples": 15,
+    "val_groups": 15,
+    "val_sources": [
+      "expanded_deployment_dataset"
+    ],
+    "test_samples": 15,
+    "test_groups": 15,
+    "test_sources": [
+      "expanded_deployment_dataset"
+    ],
+    "holdout_sources_applied": []
+  },
+  "files": {
+    "train_records.json": "e9451620d3d890c0398b70e662836a4ded8841bb849a9d35b789d8b8a4c2d827",
+    "val_records.json": "21a38e4561fc37e35ccd05d31cf82145d8fb7ca084bc41d886e2b2dbd26ad2cb",
+    "test_records.json": "ccc3f62cd17b25c4d1c947e7a994bfea22c141623d030b43f2436839ee047e14",
+    "schema.json": "f8d97a644c71f6ad67f1bf89f8504afb4f8868ac9b11dd28f23102ac8eec8afb",
+    "dataset.csv": "a19731da5080489850211d5656cb3b82464c7c8ba3838fd090bcce2235d81cdc"
+  }
+}

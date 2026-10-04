@@ -1,0 +1,89 @@
+{
+  "schema_version": "1.0.0",
+  "total_dimensions": 32,
+  "numeric_features": [
+    "client_bytes_log",
+    "server_bytes_log",
+    "client_packets_log",
+    "server_packets_log",
+    "duration_log",
+    "bytes_ratio",
+    "packets_ratio",
+    "certificate_key_size_scaled",
+    "tls_established_flag",
+    "forward_secrecy_flag"
+  ],
+  "categorical_features": [
+    "protocol_cat",
+    "tls_version_cat",
+    "cipher_suite_cat",
+    "elliptic_curve_cat"
+  ],
+  "encoded_feature_names": [
+    "client_bytes_log",
+    "server_bytes_log",
+    "client_packets_log",
+    "server_packets_log",
+    "duration_log",
+    "bytes_ratio",
+    "packets_ratio",
+    "certificate_key_size_scaled",
+    "tls_established_flag",
+    "forward_secrecy_flag",
+    "protocol_cat__SMTP",
+    "protocol_cat__IMAP",
+    "protocol_cat__POP3",
+    "protocol_cat__UNKNOWN",
+    "tls_version_cat__TLSv13",
+    "tls_version_cat__TLSv12",
+    "tls_version_cat__TLSv11",
+    "tls_version_cat__TLSv10",
+    "tls_version_cat__SSLv3",
+    "tls_version_cat__UNKNOWN",
+    "cipher_suite_cat__TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
+    "cipher_suite_cat__TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256",
+    "cipher_suite_cat__TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384",
+    "cipher_suite_cat__TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256",
+    "cipher_suite_cat__TLS_AES_256_GCM_SHA384",
+    "cipher_suite_cat__TLS_AES_128_GCM_SHA256",
+    "cipher_suite_cat__UNKNOWN",
+    "elliptic_curve_cat__x25519",
+    "elliptic_curve_cat__secp256r1",
+    "elliptic_curve_cat__secp384r1",
+    "elliptic_curve_cat__secp521r1",
+    "elliptic_curve_cat__UNKNOWN"
+  ],
+  "vocabularies": {
+    "protocol": [
+      "SMTP",
+      "IMAP",
+      "POP3",
+      "UNKNOWN"
+    ],
+    "tls_version": [
+      "TLSv13",
+      "TLSv12",
+      "TLSv11",
+      "TLSv10",
+      "SSLv3",
+      "UNKNOWN"
+    ],
+    "cipher_suite": [
+      "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
+      "TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256",
+      "TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384",
+      "TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256",
+      "TLS_AES_256_GCM_SHA384",
+      "TLS_AES_128_GCM_SHA256",
+      "UNKNOWN"
+    ],
+    "elliptic_curve": [
+      "x25519",
+      "secp256r1",
+      "secp384r1",
+      "secp521r1",
+      "UNKNOWN"
+    ]
+  },
+  "forbidden_features_count": 18
+}

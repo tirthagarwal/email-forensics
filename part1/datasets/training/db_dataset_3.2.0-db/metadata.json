@@ -1,0 +1,52 @@
+{
+  "dataset_version": "db_dataset_3.2.0-db",
+  "creation_time": "2026-09-28T20:23:01.695583+00:00",
+  "source_datasets": [
+    "expanded_deployment_dataset",
+    "local_email_pcap",
+    "passive_os"
+  ],
+  "record_count": 21796,
+  "group_count": 21796,
+  "feature_schema_version": "1.0.0",
+  "train_count": 15257,
+  "validation_count": 3269,
+  "test_count": 3270,
+  "random_state": 42,
+  "group_strategy": "capture_source_hierarchy",
+  "missing_value_strategy": "documented_sentinels_zero_imputation",
+  "preprocessing": "log1p_and_standard_vocabulary_onehot",
+  "description": "Extracted from database for model 3.2.0-db",
+  "summary": {
+    "total_samples": 21796,
+    "total_groups": 21796,
+    "train_samples": 15257,
+    "train_groups": 15257,
+    "train_sources": [
+      "expanded_deployment_dataset",
+      "local_email_pcap",
+      "passive_os"
+    ],
+    "val_samples": 3269,
+    "val_groups": 3269,
+    "val_sources": [
+      "expanded_deployment_dataset",
+      "local_email_pcap",
+      "passive_os"
+    ],
+    "test_samples": 3270,
+    "test_groups": 3270,
+    "test_sources": [
+      "expanded_deployment_dataset",
+      "passive_os"
+    ],
+    "holdout_sources_applied": []
+  },
+  "files": {
+    "train_records.json": "1c6c7133f377b7bdeda4a2e843d51a94c7e52620e9bcf9d881b4eddacc2f4828",
+    "val_records.json": "aafbd586cd3a7aebcf69a5c054f8261162bf927c6407230567f16f691bd82154",
+    "test_records.json": "b4b6e402531fbef3e857b82fa06e28545ea7c1b1fdab05b665346fa8a77d7d67",
+    "schema.json": "f8d97a644c71f6ad67f1bf89f8504afb4f8868ac9b11dd28f23102ac8eec8afb",
+    "dataset.csv": "e3090c029e89f74d52e83eebc2ddda2d1dbc6758868751d7f01459c270e38084"
+  }
+}

@@ -1,0 +1,77 @@
+{
+  "model_version": "3.1.0-db",
+  "model_variant": "db_v1",
+  "algorithm": "IsolationForest",
+  "feature_schema_version": "1.0.0",
+  "training_dataset_version": "db_dataset_3.1.0-db",
+  "threshold": 0.0,
+  "n_estimators": 200,
+  "random_state": 42,
+  "sample_count": 4,
+  "split_summary": {
+    "total_samples": 4,
+    "total_groups": 4,
+    "train_samples": 2,
+    "train_groups": 2,
+    "val_samples": 1,
+    "val_groups": 1,
+    "test_samples": 1,
+    "test_groups": 1
+  },
+  "artifact_sha256": "baf2b7432c38d4577e7b360d910bfbef704fc79676ab73bc504cec188f6cf542",
+  "validation_eval": {
+    "split_name": "validation",
+    "sample_count": 1,
+    "evaluation_type": "Unsupervised evaluation \u2014 no independent anomaly ground truth",
+    "threshold": 0.0,
+    "anomalies_detected": 0,
+    "anomaly_rate_percent": 0.0,
+    "scores_bounded": true,
+    "score_distribution": {
+      "min": 0.0,
+      "max": 0.0,
+      "mean": 0.0,
+      "std": 0.0,
+      "p5": 0.0,
+      "p10": 0.0,
+      "p50": 0.0,
+      "p90": 0.0,
+      "p95": 0.0
+    }
+  },
+  "test_eval": {
+    "split_name": "test",
+    "sample_count": 1,
+    "evaluation_type": "Unsupervised evaluation \u2014 no independent anomaly ground truth",
+    "threshold": 0.0,
+    "anomalies_detected": 0,
+    "anomaly_rate_percent": 0.0,
+    "scores_bounded": true,
+    "score_distribution": {
+      "min": 0.0,
+      "max": 0.0,
+      "mean": 0.0,
+      "std": 0.0,
+      "p5": 0.0,
+      "p10": 0.0,
+      "p50": 0.0,
+      "p90": 0.0,
+      "p95": 0.0
+    }
+  },
+  "benchmark_eval": {
+    "status": "EVALUATED_OK",
+    "benchmark_file": "labeled_ground_truth.json",
+    "sample_count": 5,
+    "threshold": 0.0,
+    "tp": 0,
+    "fp": 0,
+    "tn": 2,
+    "fn": 3,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1_score": 0.0,
+    "fpr": 0.0,
+    "fnr": 1.0
+  }
+}

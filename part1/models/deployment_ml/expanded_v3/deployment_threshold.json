@@ -1,0 +1,9 @@
+{
+  "model_name": "IsolationForest",
+  "threshold_method": "validation_lower_tail_percentile",
+  "percentile": 10,
+  "threshold": -0.041466321224221024,
+  "validation_size": 1635,
+  "random_seed": 42,
+  "labels_used": false
+}

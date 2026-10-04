@@ -1,0 +1,1238 @@
+{
+    "report_metadata": {
+        "framework_name": "AI-Assisted Passive Network Forensic Framework for Email Cryptographic Security Posture Assessment",
+        "version": "1.0.0",
+        "generated_at": "2026-09-30T09:53:15Z",
+        "tls_keylog_supplied": false,
+        "tls_keylog_decryption_status": "NOT_APPLICABLE"
+    },
+    "pcap": {
+        "total_pcaps": 4,
+        "files_analyzed": [
+            "part1/pcaps/smtp_test.pcap",
+            "part1/pcaps/imap_starttls_real.pcap",
+            "part1/pcaps/pop3_stls_real.pcap",
+            "part1/pcaps/smtp_starttls_real.pcap"
+        ],
+        "analyzed_at": "2026-09-30T09:53:15Z",
+        "total_connections": 4
+    },
+    "summary": {
+        "total_pcaps": 4,
+        "total_sessions": 4,
+        "total_findings": 6,
+        "baseline_score": 18.5,
+        "cryptographic_score": 13.88,
+        "overall_risk_score": 32.38,
+        "score_delta": 13.88,
+        "risk_level": "LOW",
+        "total_ml_anomalies": 4
+    },
+    "security_assessment": {
+        "baseline_score": 18.5,
+        "cryptographic_score": 13.88,
+        "final_score": 32.38,
+        "score_delta": 13.88,
+        "controls": [
+            {
+                "control_id": "CTRL_EMAIL_PROTOCOL",
+                "category": "EMAIL_PROTOCOL",
+                "name": "Email Protocol Identification",
+                "observed": "Observed Protocols: IMAP, POP3, SMTP",
+                "expected": "SMTP, IMAP, or POP3 protocol traffic",
+                "status": "PASS",
+                "status_symbol": "\u2713 PASS",
+                "severity": "INFO",
+                "why": "Email transport and retrieval protocol traffic successfully parsed from network capture.",
+                "evidence": "Total email sessions identified: 4 across protocols IMAP, POP3, SMTP",
+                "recommendation": "Maintain continuous network monitoring on standard email ports.",
+                "score_contribution": 0
+            },
+            {
+                "control_id": "CTRL_STARTTLS",
+                "category": "TRANSPORT_SECURITY",
+                "name": "STARTTLS / STLS Upgrade Enforcement",
+                "observed": "Cleartext session(s) without STARTTLS/STLS upgrade (3 session(s))",
+                "expected": "STARTTLS / STLS Upgrade Enforced on All Cleartext Connections",
+                "status": "VIOLATION",
+                "status_symbol": "\u2715 VIOLATION",
+                "severity": "HIGH",
+                "why": "Session initiated in cleartext without requesting or accepting STARTTLS/STLS encryption upgrade.",
+                "evidence": "Findings: 192.168.1.10:50000 -> 192.168.1.20:25 (UID: CjzLHc2UPLt9WIoIVe); 192.168.1.50:54322 -> 192.168.1.20:143 (UID: CgWrPJ1PvtafNJuHb9); 192.168.1.50:54323 -> 192.168.1.20:110 (UID: Cls5Ux3vMjU8V5BxQ7)",
+                "recommendation": "Configure email servers to enforce STARTTLS (SMTP/IMAP) and STLS (POP3) upgrades before handling mail.",
+                "score_contribution": 60
+            },
+            {
+                "control_id": "CTRL_PLAINTEXT_AUTH",
+                "category": "TRANSPORT_SECURITY",
+                "name": "Plaintext Authentication Protection",
+                "observed": "No authentication commands transmitted in cleartext",
+                "expected": "Authentication Commands Restricted to TLS Encrypted Sessions",
+                "status": "PASS",
+                "status_symbol": "\u2713 PASS",
+                "severity": "INFO",
+                "why": "No unencrypted authentication attempts were detected.",
+                "evidence": "All authentication commands occurred within encrypted TLS sessions.",
+                "recommendation": "Continue restricting AUTH commands to encrypted channels.",
+                "score_contribution": 0
+            },
+            {
+                "control_id": "CTRL_TLS_VERSION",
+                "category": "TLS_CONFIGURATION",
+                "name": "TLS Protocol Version Compliance",
+                "observed": "Modern TLS Version Negotiated (TLSv12)",
+                "expected": "TLS 1.2 or TLS 1.3",
+                "status": "PASS",
+                "status_symbol": "\u2713 PASS",
+                "severity": "INFO",
+                "why": "Session negotiated recommended TLS version (TLS 1.2 or TLS 1.3).",
+                "evidence": "Observed TLS versions: TLSv12",
+                "recommendation": "Maintain TLS 1.2+ minimum protocol requirement.",
+                "score_contribution": 0
+            },
+            {
+                "control_id": "CTRL_CIPHER_SUITE",
+                "category": "CRYPTOGRAPHY",
+                "name": "Cipher Suite Security",
+                "observed": "Strong Cipher Suite Negotiated (TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384)",
+                "expected": "Strong AEAD Cipher Suites (AES-GCM / CHACHA20-POLY1305)",
+                "status": "PASS",
+                "status_symbol": "\u2713 PASS",
+                "severity": "INFO",
+                "why": "Negotiated cipher suite meets modern cryptographic standards.",
+                "evidence": "Observed ciphers: TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
+                "recommendation": "Maintain strong cipher ordering preferences.",
+                "score_contribution": 0
+            },
+            {
+                "control_id": "CTRL_FORWARD_SECRECY",
+                "category": "CRYPTOGRAPHY",
+                "name": "Perfect Forward Secrecy (PFS)",
+                "observed": "Ephemeral Key Exchange (ECDHE/DHE) Negotiated (3/3 TLS sessions)",
+                "expected": "Ephemeral Key Exchange (ECDHE or DHE)",
+                "status": "PASS",
+                "status_symbol": "\u2713 PASS",
+                "severity": "INFO",
+                "why": "Perfect Forward Secrecy (PFS) is active, protecting past communications from decryption.",
+                "evidence": "ECDHE/DHE observed on 3 session(s).",
+                "recommendation": "Maintain Ephemeral Diffie-Hellman key exchange preference.",
+                "score_contribution": 0
+            },
+            {
+                "control_id": "CTRL_ELLIPTIC_CURVE",
+                "category": "CRYPTOGRAPHY",
+                "name": "Elliptic Curve Selection",
+                "observed": "Elliptic Curve: x25519",
+                "expected": "Standardized Curves (x25519, secp256r1, secp384r1)",
+                "status": "PASS",
+                "status_symbol": "\u2713 PASS",
+                "severity": "INFO",
+                "why": "Standardized curves provide performance and resistance against side-channel attacks.",
+                "evidence": "Observed elliptic curve parameters: x25519",
+                "recommendation": "Maintain Curve25519 and P-256 support.",
+                "score_contribution": 0
+            },
+            {
+                "control_id": "CTRL_CERT_TRUST",
+                "category": "CERTIFICATE_SECURITY",
+                "name": "Certificate Trust & Authority",
+                "observed": "Self-Signed Certificate in Use (3 cert(s))",
+                "expected": "Certificate Issued by Recognized Public or Enterprise CA",
+                "status": "WARNING",
+                "status_symbol": "\u26a0 WARNING",
+                "severity": "MEDIUM",
+                "why": "Self-signed certificates cannot be validated by standard public trust stores, introducing trust ambiguity for external mail clients.",
+                "evidence": "Evidence: Certificate subject 'CN=mail.example.local,OU=Security,O=EmailForensicsTest,L=SanFrancisco,ST=California,C=US' matches issuer.; Certificate subject 'CN=mail.example.local,OU=Security,O=EmailForensicsTest,L=SanFrancisco,ST=California,C=US' matches issuer.; Certificate subject 'CN=mail.example.local,OU=Security,O=EmailForensicsTest,L=SanFrancisco,ST=California,C=US' matches issuer.",
+                "recommendation": "Deploy certificates issued by a trusted enterprise or public Certificate Authority.",
+                "score_contribution": 45
+            },
+            {
+                "control_id": "CTRL_CERT_VALIDITY",
+                "category": "CERTIFICATE_SECURITY",
+                "name": "Certificate Lifetime & Expiration",
+                "observed": "Certificate Currently Active & Valid (approximately 360.84 days remaining)",
+                "expected": "Active Certificate Within Valid Lifetime",
+                "status": "PASS",
+                "status_symbol": "\u2713 PASS",
+                "severity": "INFO",
+                "why": "Certificate activation timestamp is valid and expiration date is in the future.",
+                "evidence": "Inspected 3 certificate(s); all within valid lifetime.",
+                "recommendation": "Automate certificate renewal before expiration.",
+                "score_contribution": 0
+            },
+            {
+                "control_id": "CTRL_CERT_HOSTNAME",
+                "category": "CERTIFICATE_SECURITY",
+                "name": "Certificate Hostname & SNI Alignment",
+                "observed": "mail.example.local \u2192 MATCH (Server SNI Matches Certificate Subject / SAN)",
+                "expected": "Target Server FQDN Matches Certificate SAN / Subject",
+                "status": "PASS",
+                "status_symbol": "\u2713 PASS",
+                "severity": "INFO",
+                "why": "Target hostname matches certificate subject name.",
+                "evidence": "Validated hostname match for 3 certificate session(s).",
+                "recommendation": "Maintain SNI alignment on load balancers and mail servers.",
+                "score_contribution": 0
+            },
+            {
+                "control_id": "CTRL_CERT_KEY_SIZE",
+                "category": "CERTIFICATE_SECURITY",
+                "name": "Public Key Size Compliance",
+                "observed": "Sufficient Public Key Length (RSA 2048)",
+                "expected": "RSA >= 2048-bit or ECC >= 256-bit",
+                "status": "PASS",
+                "status_symbol": "\u2713 PASS",
+                "severity": "INFO",
+                "why": "Public key size satisfies modern NIST cryptographic guidelines.",
+                "evidence": "Verified public key sizes: RSA 2048",
+                "recommendation": "Maintain 2048-bit minimum key size policy.",
+                "score_contribution": 0
+            },
+            {
+                "control_id": "CTRL_CERT_SIG_ALG",
+                "category": "CERTIFICATE_SECURITY",
+                "name": "Signature Algorithm Security",
+                "observed": "Strong Signature Algorithm (sha256WithRSAEncryption)",
+                "expected": "SHA-256, SHA-384, or SHA-512",
+                "status": "PASS",
+                "status_symbol": "\u2713 PASS",
+                "severity": "INFO",
+                "why": "Certificate signature algorithm satisfies modern security baselines.",
+                "evidence": "Inspected signature algorithms: sha256WithRSAEncryption",
+                "recommendation": "Maintain SHA-256+ signature algorithm policy.",
+                "score_contribution": 0
+            },
+            {
+                "control_id": "CTRL_FINGERPRINTING",
+                "category": "FINGERPRINTING",
+                "name": "TLS Client / Server Fingerprinting (JA3 / JA4)",
+                "observed": "NOT AVAILABLE IN CAPTURE (Optional Zeek Fingerprint Package Not Installed)",
+                "expected": "JA3 / JA3S / JA4 Fingerprint String for Client/Server Profiling",
+                "status": "NOT OBSERVED",
+                "status_symbol": "\u2014 NOT OBSERVED",
+                "severity": "INFO",
+                "why": "JA3 and JA4 fingerprinting require optional Zeek package extensions which were not active during capture logging.",
+                "evidence": "Fields ja3: null, ja3s: null, ja4: null, ja4s: null across all captured sessions.",
+                "recommendation": "If client fingerprinting is required, install zeek-ja3 or zeek-ja4 packages in the Zeek deployment.",
+                "score_contribution": 0
+            }
+        ],
+        "violations": [
+            {
+                "control_id": "CTRL_STARTTLS",
+                "category": "TRANSPORT_SECURITY",
+                "name": "STARTTLS / STLS Upgrade Enforcement",
+                "observed": "Cleartext session(s) without STARTTLS/STLS upgrade (3 session(s))",
+                "expected": "STARTTLS / STLS Upgrade Enforced on All Cleartext Connections",
+                "status": "VIOLATION",
+                "status_symbol": "\u2715 VIOLATION",
+                "severity": "HIGH",
+                "why": "Session initiated in cleartext without requesting or accepting STARTTLS/STLS encryption upgrade.",
+                "evidence": "Findings: 192.168.1.10:50000 -> 192.168.1.20:25 (UID: CjzLHc2UPLt9WIoIVe); 192.168.1.50:54322 -> 192.168.1.20:143 (UID: CgWrPJ1PvtafNJuHb9); 192.168.1.50:54323 -> 192.168.1.20:110 (UID: Cls5Ux3vMjU8V5BxQ7)",
+                "recommendation": "Configure email servers to enforce STARTTLS (SMTP/IMAP) and STLS (POP3) upgrades before handling mail.",
+                "score_contribution": 60
+            },
+            {
+                "control_id": "CTRL_CERT_TRUST",
+                "category": "CERTIFICATE_SECURITY",
+                "name": "Certificate Trust & Authority",
+                "observed": "Self-Signed Certificate in Use (3 cert(s))",
+                "expected": "Certificate Issued by Recognized Public or Enterprise CA",
+                "status": "WARNING",
+                "status_symbol": "\u26a0 WARNING",
+                "severity": "MEDIUM",
+                "why": "Self-signed certificates cannot be validated by standard public trust stores, introducing trust ambiguity for external mail clients.",
+                "evidence": "Evidence: Certificate subject 'CN=mail.example.local,OU=Security,O=EmailForensicsTest,L=SanFrancisco,ST=California,C=US' matches issuer.; Certificate subject 'CN=mail.example.local,OU=Security,O=EmailForensicsTest,L=SanFrancisco,ST=California,C=US' matches issuer.; Certificate subject 'CN=mail.example.local,OU=Security,O=EmailForensicsTest,L=SanFrancisco,ST=California,C=US' matches issuer.",
+                "recommendation": "Deploy certificates issued by a trusted enterprise or public Certificate Authority.",
+                "score_contribution": 45
+            }
+        ],
+        "risk_contributors": [
+            {
+                "rule_id": "CERT_SELF_SIGNED",
+                "title": "Self-Signed Certificate in Use",
+                "points_added": 45,
+                "occurrences": 3
+            },
+            {
+                "rule_id": "SMTP_NO_STARTTLS",
+                "title": "Cleartext SMTP Connection without STARTTLS",
+                "points_added": 20,
+                "occurrences": 1
+            },
+            {
+                "rule_id": "IMAP_NO_STARTTLS",
+                "title": "Cleartext IMAP Session",
+                "points_added": 20,
+                "occurrences": 1
+            },
+            {
+                "rule_id": "POP3_NO_STLS",
+                "title": "Cleartext POP3 Session",
+                "points_added": 20,
+                "occurrences": 1
+            }
+        ]
+    },
+    "connections": [
+        {
+            "uid": "CjzLHc2UPLt9WIoIVe",
+            "pcap_source": "part1/pcaps/smtp_test.pcap",
+            "source": "192.168.1.10:50000",
+            "destination": "192.168.1.20:25",
+            "protocol": "tcp",
+            "service": "smtp",
+            "duration_seconds": 0.000668,
+            "client_bytes": 36,
+            "server_bytes": 57,
+            "conn_state": "S1"
+        },
+        {
+            "uid": "CgWrPJ1PvtafNJuHb9",
+            "pcap_source": "part1/pcaps/imap_starttls_real.pcap",
+            "source": "192.168.1.50:54322",
+            "destination": "192.168.1.20:143",
+            "protocol": "tcp",
+            "service": "imap,ssl",
+            "duration_seconds": 0.3,
+            "client_bytes": 413,
+            "server_bytes": 1838,
+            "conn_state": "SF"
+        },
+        {
+            "uid": "Cls5Ux3vMjU8V5BxQ7",
+            "pcap_source": "part1/pcaps/pop3_stls_real.pcap",
+            "source": "192.168.1.50:54323",
+            "destination": "192.168.1.20:110",
+            "protocol": "tcp",
+            "service": "pop3,ssl",
+            "duration_seconds": 0.3,
+            "client_bytes": 409,
+            "server_bytes": 1770,
+            "conn_state": "SF"
+        },
+        {
+            "uid": "Cjxxth16yhCMYiG7j",
+            "pcap_source": "part1/pcaps/smtp_starttls_real.pcap",
+            "source": "192.168.1.50:54321",
+            "destination": "192.168.1.20:25",
+            "protocol": "tcp",
+            "service": "smtp,ssl",
+            "duration_seconds": 0.3,
+            "client_bytes": 410,
+            "server_bytes": 1776,
+            "conn_state": "SF"
+        }
+    ],
+    "email_sessions": [
+        {
+            "uid": "CjzLHc2UPLt9WIoIVe",
+            "protocol": "SMTP",
+            "encryption_mode": "PLAINTEXT",
+            "starttls_attempted": false,
+            "starttls_accepted": false,
+            "implicit_tls": false,
+            "tls_established": false,
+            "authentication_observed": false,
+            "plaintext_auth_risk": false,
+            "extracted_commands": [],
+            "tls_version": null,
+            "cipher_suite": null,
+            "ml_anomaly_score": 0.6873
+        },
+        {
+            "uid": "CgWrPJ1PvtafNJuHb9",
+            "protocol": "IMAP",
+            "encryption_mode": "ENCRYPTED_TLS",
+            "starttls_attempted": false,
+            "starttls_accepted": false,
+            "implicit_tls": false,
+            "tls_established": true,
+            "authentication_observed": false,
+            "plaintext_auth_risk": false,
+            "extracted_commands": [],
+            "tls_version": "TLSv12",
+            "cipher_suite": "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
+            "ml_anomaly_score": 0.6082
+        },
+        {
+            "uid": "Cls5Ux3vMjU8V5BxQ7",
+            "protocol": "POP3",
+            "encryption_mode": "ENCRYPTED_TLS",
+            "starttls_attempted": false,
+            "starttls_accepted": false,
+            "implicit_tls": false,
+            "tls_established": true,
+            "authentication_observed": false,
+            "plaintext_auth_risk": false,
+            "extracted_commands": [],
+            "tls_version": "TLSv12",
+            "cipher_suite": "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
+            "ml_anomaly_score": 0.6082
+        },
+        {
+            "uid": "Cjxxth16yhCMYiG7j",
+            "protocol": "SMTP",
+            "encryption_mode": "STARTTLS_ACCEPTED",
+            "starttls_attempted": true,
+            "starttls_accepted": true,
+            "implicit_tls": false,
+            "tls_established": true,
+            "authentication_observed": false,
+            "plaintext_auth_risk": false,
+            "extracted_commands": [],
+            "tls_version": "TLSv12",
+            "cipher_suite": "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
+            "ml_anomaly_score": 0.6082
+        }
+    ],
+    "tls_sessions": [
+        {
+            "uid": "CgWrPJ1PvtafNJuHb9",
+            "version": "TLSv12",
+            "cipher": "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
+            "curve": "x25519",
+            "server_name": "mail.example.local",
+            "established": true,
+            "validation_status": "self signed certificate",
+            "sni_matches_cert": true
+        },
+        {
+            "uid": "Cls5Ux3vMjU8V5BxQ7",
+            "version": "TLSv12",
+            "cipher": "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
+            "curve": "x25519",
+            "server_name": "mail.example.local",
+            "established": true,
+            "validation_status": "self signed certificate",
+            "sni_matches_cert": true
+        },
+        {
+            "uid": "Cjxxth16yhCMYiG7j",
+            "version": "TLSv12",
+            "cipher": "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
+            "curve": "x25519",
+            "server_name": "mail.example.local",
+            "established": true,
+            "validation_status": "self signed certificate",
+            "sni_matches_cert": true
+        }
+    ],
+    "certificates": [
+        {
+            "fingerprint_sha256": "43a06b5986d1a0e94e00caa1f2f120bd464551afc8152e48e5096bafb684e0e8",
+            "subject": "CN=mail.example.local,OU=Security,O=EmailForensicsTest,L=SanFrancisco,ST=California,C=US",
+            "issuer": "CN=mail.example.local,OU=Security,O=EmailForensicsTest,L=SanFrancisco,ST=California,C=US",
+            "serial": "B918EB6DFE9D1412",
+            "key_length": 2048,
+            "key_algorithm": "rsaEncryption",
+            "signature_algorithm": "sha256WithRSAEncryption"
+        },
+        {
+            "fingerprint_sha256": "43a06b5986d1a0e94e00caa1f2f120bd464551afc8152e48e5096bafb684e0e8",
+            "subject": "CN=mail.example.local,OU=Security,O=EmailForensicsTest,L=SanFrancisco,ST=California,C=US",
+            "issuer": "CN=mail.example.local,OU=Security,O=EmailForensicsTest,L=SanFrancisco,ST=California,C=US",
+            "serial": "B918EB6DFE9D1412",
+            "key_length": 2048,
+            "key_algorithm": "rsaEncryption",
+            "signature_algorithm": "sha256WithRSAEncryption"
+        },
+        {
+            "fingerprint_sha256": "43a06b5986d1a0e94e00caa1f2f120bd464551afc8152e48e5096bafb684e0e8",
+            "subject": "CN=mail.example.local,OU=Security,O=EmailForensicsTest,L=SanFrancisco,ST=California,C=US",
+            "issuer": "CN=mail.example.local,OU=Security,O=EmailForensicsTest,L=SanFrancisco,ST=California,C=US",
+            "serial": "B918EB6DFE9D1412",
+            "key_length": 2048,
+            "key_algorithm": "rsaEncryption",
+            "signature_algorithm": "sha256WithRSAEncryption"
+        }
+    ],
+    "cryptographic_features": [
+        {
+            "uid": "CjzLHc2UPLt9WIoIVe",
+            "protocol": "SMTP",
+            "starttls_detected": false,
+            "starttls_accepted": false,
+            "implicit_tls": false,
+            "tls_established": false,
+            "authentication_observed": false,
+            "plaintext_auth_risk": false,
+            "server_name": null,
+            "tls_version": null,
+            "cipher_suite": null,
+            "elliptic_curve": null,
+            "key_exchange": null,
+            "forward_secrecy_indicator": null,
+            "weak_tls_version": null,
+            "weak_cipher": null,
+            "weak_key_exchange": null,
+            "weak_curve": null,
+            "certificate_visibility_status": "NOT_OBSERVED",
+            "certificate_visibility_reason": "No certificate evidence associated with TLS session",
+            "certificate_public_key_algorithm": null,
+            "certificate_signature_algorithm": null,
+            "certificate_key_size": null,
+            "weak_key_size": null,
+            "weak_signature_algorithm": null,
+            "certificate_self_signed": null,
+            "certificate_expired": null,
+            "certificate_not_yet_valid": null,
+            "certificate_days_remaining": null,
+            "certificate_hostname_match": null,
+            "certificate_problem": false,
+            "missing_starttls": true,
+            "failed_starttls": false,
+            "deprecated_crypto": false,
+            "ja3": null,
+            "ja3s": null,
+            "ja4": null,
+            "ja4s": null,
+            "_client_bytes": 36,
+            "_server_bytes": 57,
+            "_client_packets": 4,
+            "_server_packets": 3,
+            "_duration": 0.000668
+        },
+        {
+            "uid": "CgWrPJ1PvtafNJuHb9",
+            "protocol": "IMAP",
+            "starttls_detected": false,
+            "starttls_accepted": false,
+            "implicit_tls": false,
+            "tls_established": true,
+            "authentication_observed": false,
+            "plaintext_auth_risk": false,
+            "server_name": "mail.example.local",
+            "tls_version": "TLSv12",
+            "cipher_suite": "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
+            "elliptic_curve": "x25519",
+            "key_exchange": "ECDHE/DHE",
+            "forward_secrecy_indicator": true,
+            "weak_tls_version": false,
+            "weak_cipher": false,
+            "weak_key_exchange": false,
+            "weak_curve": false,
+            "certificate_visibility_status": "OBSERVED",
+            "certificate_visibility_reason": "Certificate fields extracted from X.509 evidence",
+            "certificate_public_key_algorithm": "rsaEncryption",
+            "certificate_signature_algorithm": "sha256WithRSAEncryption",
+            "certificate_key_size": 2048,
+            "weak_key_size": false,
+            "weak_signature_algorithm": false,
+            "certificate_self_signed": true,
+            "certificate_expired": false,
+            "certificate_not_yet_valid": false,
+            "certificate_days_remaining": 360.84,
+            "certificate_hostname_match": true,
+            "certificate_problem": true,
+            "missing_starttls": true,
+            "failed_starttls": false,
+            "deprecated_crypto": false,
+            "ja3": null,
+            "ja3s": null,
+            "ja4": null,
+            "ja4s": null,
+            "_client_bytes": 413,
+            "_server_bytes": 1838,
+            "_client_packets": 17,
+            "_server_packets": 15,
+            "_duration": 0.3
+        },
+        {
+            "uid": "Cls5Ux3vMjU8V5BxQ7",
+            "protocol": "POP3",
+            "starttls_detected": false,
+            "starttls_accepted": false,
+            "implicit_tls": false,
+            "tls_established": true,
+            "authentication_observed": false,
+            "plaintext_auth_risk": false,
+            "server_name": "mail.example.local",
+            "tls_version": "TLSv12",
+            "cipher_suite": "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
+            "elliptic_curve": "x25519",
+            "key_exchange": "ECDHE/DHE",
+            "forward_secrecy_indicator": true,
+            "weak_tls_version": false,
+            "weak_cipher": false,
+            "weak_key_exchange": false,
+            "weak_curve": false,
+            "certificate_visibility_status": "OBSERVED",
+            "certificate_visibility_reason": "Certificate fields extracted from X.509 evidence",
+            "certificate_public_key_algorithm": "rsaEncryption",
+            "certificate_signature_algorithm": "sha256WithRSAEncryption",
+            "certificate_key_size": 2048,
+            "weak_key_size": false,
+            "weak_signature_algorithm": false,
+            "certificate_self_signed": true,
+            "certificate_expired": false,
+            "certificate_not_yet_valid": false,
+            "certificate_days_remaining": 360.84,
+            "certificate_hostname_match": true,
+            "certificate_problem": true,
+            "missing_starttls": true,
+            "failed_starttls": false,
+            "deprecated_crypto": false,
+            "ja3": null,
+            "ja3s": null,
+            "ja4": null,
+            "ja4s": null,
+            "_client_bytes": 409,
+            "_server_bytes": 1770,
+            "_client_packets": 17,
+            "_server_packets": 15,
+            "_duration": 0.3
+        },
+        {
+            "uid": "Cjxxth16yhCMYiG7j",
+            "protocol": "SMTP",
+            "starttls_detected": true,
+            "starttls_accepted": true,
+            "implicit_tls": false,
+            "tls_established": true,
+            "authentication_observed": false,
+            "plaintext_auth_risk": false,
+            "server_name": "mail.example.local",
+            "tls_version": "TLSv12",
+            "cipher_suite": "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
+            "elliptic_curve": "x25519",
+            "key_exchange": "ECDHE/DHE",
+            "forward_secrecy_indicator": true,
+            "weak_tls_version": false,
+            "weak_cipher": false,
+            "weak_key_exchange": false,
+            "weak_curve": false,
+            "certificate_visibility_status": "OBSERVED",
+            "certificate_visibility_reason": "Certificate fields extracted from X.509 evidence",
+            "certificate_public_key_algorithm": "rsaEncryption",
+            "certificate_signature_algorithm": "sha256WithRSAEncryption",
+            "certificate_key_size": 2048,
+            "weak_key_size": false,
+            "weak_signature_algorithm": false,
+            "certificate_self_signed": true,
+            "certificate_expired": false,
+            "certificate_not_yet_valid": false,
+            "certificate_days_remaining": 360.84,
+            "certificate_hostname_match": true,
+            "certificate_problem": true,
+            "missing_starttls": false,
+            "failed_starttls": false,
+            "deprecated_crypto": false,
+            "ja3": null,
+            "ja3s": null,
+            "ja4": null,
+            "ja4s": null,
+            "_client_bytes": 410,
+            "_server_bytes": 1776,
+            "_client_packets": 17,
+            "_server_packets": 15,
+            "_duration": 0.3
+        }
+    ],
+    "findings": [
+        {
+            "rule_id": "IMAP_NO_STARTTLS",
+            "severity": "HIGH",
+            "title": "Cleartext IMAP Session",
+            "description": "IMAP session established on port 143 without STARTTLS or implicit TLS.",
+            "evidence": "IMAP session on port 143 transmitted in cleartext without STARTTLS/STLS upgrade.",
+            "affected_connection": "192.168.1.50:54322 -> 192.168.1.20:143 (UID: CgWrPJ1PvtafNJuHb9)",
+            "affected_protocol": "IMAP",
+            "confidence": "HIGH",
+            "security_impact": "Mailbox contents and user authentication credentials are exposed to passive eavesdropping.",
+            "references": [
+                "RFC 8314 (Use of TLS for Email Submission and Access)"
+            ],
+            "recommendation": "Disable plaintext port 143 or enforce STARTTLS / implicit TLS on port 993.",
+            "technical_remediation": "Disable plaintext port 143 or enforce STARTTLS / implicit TLS on port 993."
+        },
+        {
+            "rule_id": "POP3_NO_STLS",
+            "severity": "HIGH",
+            "title": "Cleartext POP3 Session",
+            "description": "POP3 session established on port 110 without STLS or implicit TLS.",
+            "evidence": "POP3 session on port 110 transmitted in cleartext without STARTTLS/STLS upgrade.",
+            "affected_connection": "192.168.1.50:54323 -> 192.168.1.20:110 (UID: Cls5Ux3vMjU8V5BxQ7)",
+            "affected_protocol": "POP3",
+            "confidence": "HIGH",
+            "security_impact": "Email downloads and user credentials transmitted unencrypted.",
+            "references": [
+                "RFC 8314 (Use of TLS for Email Submission and Access)"
+            ],
+            "recommendation": "Disable plaintext port 110 or enforce STLS / implicit TLS on port 995.",
+            "technical_remediation": "Disable plaintext port 110 or enforce STLS / implicit TLS on port 995."
+        },
+        {
+            "rule_id": "SMTP_NO_STARTTLS",
+            "severity": "HIGH",
+            "title": "Cleartext SMTP Connection without STARTTLS",
+            "description": "The SMTP session was established over plain TCP on port 25 or 587 without negotiating STARTTLS encryption.",
+            "evidence": "SMTP session on port 25 transmitted in cleartext without STARTTLS/STLS upgrade.",
+            "affected_connection": "192.168.1.10:50000 -> 192.168.1.20:25 (UID: CjzLHc2UPLt9WIoIVe)",
+            "affected_protocol": "SMTP",
+            "confidence": "HIGH",
+            "security_impact": "Eavesdroppers and active network adversaries can read, modify, or inject email messages, credentials, and headers in transit.",
+            "references": [
+                "RFC 7590 (Use of TLS in Email Applications)",
+                "NIST SP 800-45 Rev 2 (Guidelines on Electronic Mail Security)"
+            ],
+            "recommendation": "Reconfigure SMTP MTA (PostFix, Exim, Sendmail) to mandate STARTTLS: `smtpd_tls_security_level = encrypt`.",
+            "technical_remediation": "Reconfigure SMTP MTA (PostFix, Exim, Sendmail) to mandate STARTTLS: `smtpd_tls_security_level = encrypt`."
+        },
+        {
+            "rule_id": "CERT_SELF_SIGNED",
+            "severity": "MEDIUM",
+            "title": "Self-Signed Certificate in Use",
+            "description": "Server certificate subject matches issuer and is not signed by a trusted Certificate Authority.",
+            "evidence": "Certificate subject 'CN=mail.example.local,OU=Security,O=EmailForensicsTest,L=SanFrancisco,ST=California,C=US' matches issuer.",
+            "affected_connection": "192.168.1.50:54322 -> 192.168.1.20:143 (UID: CgWrPJ1PvtafNJuHb9)",
+            "affected_protocol": "IMAP",
+            "confidence": "HIGH",
+            "security_impact": "Clients cannot verify server identity, exposing connections to Man-in-the-Middle (MITM) spoofing.",
+            "references": [
+                "RFC 5280 (X.509 PKI Profile)",
+                "CWE-295 (Improper Certificate Validation)"
+            ],
+            "recommendation": "Replace self-signed certificate with an X.509 certificate issued by a trusted public CA (e.g. Let's Encrypt) or internal enterprise PKI.",
+            "technical_remediation": "Replace self-signed certificate with an X.509 certificate issued by a trusted public CA (e.g. Let's Encrypt) or internal enterprise PKI."
+        },
+        {
+            "rule_id": "CERT_SELF_SIGNED",
+            "severity": "MEDIUM",
+            "title": "Self-Signed Certificate in Use",
+            "description": "Server certificate subject matches issuer and is not signed by a trusted Certificate Authority.",
+            "evidence": "Certificate subject 'CN=mail.example.local,OU=Security,O=EmailForensicsTest,L=SanFrancisco,ST=California,C=US' matches issuer.",
+            "affected_connection": "192.168.1.50:54323 -> 192.168.1.20:110 (UID: Cls5Ux3vMjU8V5BxQ7)",
+            "affected_protocol": "POP3",
+            "confidence": "HIGH",
+            "security_impact": "Clients cannot verify server identity, exposing connections to Man-in-the-Middle (MITM) spoofing.",
+            "references": [
+                "RFC 5280 (X.509 PKI Profile)",
+                "CWE-295 (Improper Certificate Validation)"
+            ],
+            "recommendation": "Replace self-signed certificate with an X.509 certificate issued by a trusted public CA (e.g. Let's Encrypt) or internal enterprise PKI.",
+            "technical_remediation": "Replace self-signed certificate with an X.509 certificate issued by a trusted public CA (e.g. Let's Encrypt) or internal enterprise PKI."
+        },
+        {
+            "rule_id": "CERT_SELF_SIGNED",
+            "severity": "MEDIUM",
+            "title": "Self-Signed Certificate in Use",
+            "description": "Server certificate subject matches issuer and is not signed by a trusted Certificate Authority.",
+            "evidence": "Certificate subject 'CN=mail.example.local,OU=Security,O=EmailForensicsTest,L=SanFrancisco,ST=California,C=US' matches issuer.",
+            "affected_connection": "192.168.1.50:54321 -> 192.168.1.20:25 (UID: Cjxxth16yhCMYiG7j)",
+            "affected_protocol": "SMTP",
+            "confidence": "HIGH",
+            "security_impact": "Clients cannot verify server identity, exposing connections to Man-in-the-Middle (MITM) spoofing.",
+            "references": [
+                "RFC 5280 (X.509 PKI Profile)",
+                "CWE-295 (Improper Certificate Validation)"
+            ],
+            "recommendation": "Replace self-signed certificate with an X.509 certificate issued by a trusted public CA (e.g. Let's Encrypt) or internal enterprise PKI.",
+            "technical_remediation": "Replace self-signed certificate with an X.509 certificate issued by a trusted public CA (e.g. Let's Encrypt) or internal enterprise PKI."
+        }
+    ],
+    "finding_groups": {
+        "Unencrypted Transport Exposure": [
+            {
+                "rule_id": "IMAP_NO_STARTTLS",
+                "severity": "HIGH",
+                "title": "Cleartext IMAP Session",
+                "description": "IMAP session established on port 143 without STARTTLS or implicit TLS.",
+                "evidence": "IMAP session on port 143 transmitted in cleartext without STARTTLS/STLS upgrade.",
+                "affected_connection": "192.168.1.50:54322 -> 192.168.1.20:143 (UID: CgWrPJ1PvtafNJuHb9)",
+                "affected_protocol": "IMAP",
+                "confidence": "HIGH",
+                "security_impact": "Mailbox contents and user authentication credentials are exposed to passive eavesdropping.",
+                "references": [
+                    "RFC 8314 (Use of TLS for Email Submission and Access)"
+                ],
+                "recommendation": "Disable plaintext port 143 or enforce STARTTLS / implicit TLS on port 993.",
+                "technical_remediation": "Disable plaintext port 143 or enforce STARTTLS / implicit TLS on port 993."
+            },
+            {
+                "rule_id": "POP3_NO_STLS",
+                "severity": "HIGH",
+                "title": "Cleartext POP3 Session",
+                "description": "POP3 session established on port 110 without STLS or implicit TLS.",
+                "evidence": "POP3 session on port 110 transmitted in cleartext without STARTTLS/STLS upgrade.",
+                "affected_connection": "192.168.1.50:54323 -> 192.168.1.20:110 (UID: Cls5Ux3vMjU8V5BxQ7)",
+                "affected_protocol": "POP3",
+                "confidence": "HIGH",
+                "security_impact": "Email downloads and user credentials transmitted unencrypted.",
+                "references": [
+                    "RFC 8314 (Use of TLS for Email Submission and Access)"
+                ],
+                "recommendation": "Disable plaintext port 110 or enforce STLS / implicit TLS on port 995.",
+                "technical_remediation": "Disable plaintext port 110 or enforce STLS / implicit TLS on port 995."
+            },
+            {
+                "rule_id": "SMTP_NO_STARTTLS",
+                "severity": "HIGH",
+                "title": "Cleartext SMTP Connection without STARTTLS",
+                "description": "The SMTP session was established over plain TCP on port 25 or 587 without negotiating STARTTLS encryption.",
+                "evidence": "SMTP session on port 25 transmitted in cleartext without STARTTLS/STLS upgrade.",
+                "affected_connection": "192.168.1.10:50000 -> 192.168.1.20:25 (UID: CjzLHc2UPLt9WIoIVe)",
+                "affected_protocol": "SMTP",
+                "confidence": "HIGH",
+                "security_impact": "Eavesdroppers and active network adversaries can read, modify, or inject email messages, credentials, and headers in transit.",
+                "references": [
+                    "RFC 7590 (Use of TLS in Email Applications)",
+                    "NIST SP 800-45 Rev 2 (Guidelines on Electronic Mail Security)"
+                ],
+                "recommendation": "Reconfigure SMTP MTA (PostFix, Exim, Sendmail) to mandate STARTTLS: `smtpd_tls_security_level = encrypt`.",
+                "technical_remediation": "Reconfigure SMTP MTA (PostFix, Exim, Sendmail) to mandate STARTTLS: `smtpd_tls_security_level = encrypt`."
+            }
+        ],
+        "Certificate Trust & Validation": [
+            {
+                "rule_id": "CERT_SELF_SIGNED",
+                "severity": "MEDIUM",
+                "title": "Self-Signed Certificate in Use",
+                "description": "Server certificate subject matches issuer and is not signed by a trusted Certificate Authority.",
+                "evidence": "Certificate subject 'CN=mail.example.local,OU=Security,O=EmailForensicsTest,L=SanFrancisco,ST=California,C=US' matches issuer.",
+                "affected_connection": "192.168.1.50:54322 -> 192.168.1.20:143 (UID: CgWrPJ1PvtafNJuHb9)",
+                "affected_protocol": "IMAP",
+                "confidence": "HIGH",
+                "security_impact": "Clients cannot verify server identity, exposing connections to Man-in-the-Middle (MITM) spoofing.",
+                "references": [
+                    "RFC 5280 (X.509 PKI Profile)",
+                    "CWE-295 (Improper Certificate Validation)"
+                ],
+                "recommendation": "Replace self-signed certificate with an X.509 certificate issued by a trusted public CA (e.g. Let's Encrypt) or internal enterprise PKI.",
+                "technical_remediation": "Replace self-signed certificate with an X.509 certificate issued by a trusted public CA (e.g. Let's Encrypt) or internal enterprise PKI."
+            },
+            {
+                "rule_id": "CERT_SELF_SIGNED",
+                "severity": "MEDIUM",
+                "title": "Self-Signed Certificate in Use",
+                "description": "Server certificate subject matches issuer and is not signed by a trusted Certificate Authority.",
+                "evidence": "Certificate subject 'CN=mail.example.local,OU=Security,O=EmailForensicsTest,L=SanFrancisco,ST=California,C=US' matches issuer.",
+                "affected_connection": "192.168.1.50:54323 -> 192.168.1.20:110 (UID: Cls5Ux3vMjU8V5BxQ7)",
+                "affected_protocol": "POP3",
+                "confidence": "HIGH",
+                "security_impact": "Clients cannot verify server identity, exposing connections to Man-in-the-Middle (MITM) spoofing.",
+                "references": [
+                    "RFC 5280 (X.509 PKI Profile)",
+                    "CWE-295 (Improper Certificate Validation)"
+                ],
+                "recommendation": "Replace self-signed certificate with an X.509 certificate issued by a trusted public CA (e.g. Let's Encrypt) or internal enterprise PKI.",
+                "technical_remediation": "Replace self-signed certificate with an X.509 certificate issued by a trusted public CA (e.g. Let's Encrypt) or internal enterprise PKI."
+            },
+            {
+                "rule_id": "CERT_SELF_SIGNED",
+                "severity": "MEDIUM",
+                "title": "Self-Signed Certificate in Use",
+                "description": "Server certificate subject matches issuer and is not signed by a trusted Certificate Authority.",
+                "evidence": "Certificate subject 'CN=mail.example.local,OU=Security,O=EmailForensicsTest,L=SanFrancisco,ST=California,C=US' matches issuer.",
+                "affected_connection": "192.168.1.50:54321 -> 192.168.1.20:25 (UID: Cjxxth16yhCMYiG7j)",
+                "affected_protocol": "SMTP",
+                "confidence": "HIGH",
+                "security_impact": "Clients cannot verify server identity, exposing connections to Man-in-the-Middle (MITM) spoofing.",
+                "references": [
+                    "RFC 5280 (X.509 PKI Profile)",
+                    "CWE-295 (Improper Certificate Validation)"
+                ],
+                "recommendation": "Replace self-signed certificate with an X.509 certificate issued by a trusted public CA (e.g. Let's Encrypt) or internal enterprise PKI.",
+                "technical_remediation": "Replace self-signed certificate with an X.509 certificate issued by a trusted public CA (e.g. Let's Encrypt) or internal enterprise PKI."
+            }
+        ]
+    },
+    "risk_assessment": {
+        "overall_risk_score": 32.38,
+        "risk_level": "LOW",
+        "max_session_score": 35,
+        "average_session_score": 26.25,
+        "contributors": [
+            {
+                "rule_id": "CERT_SELF_SIGNED",
+                "title": "Self-Signed Certificate in Use",
+                "points_added": 45,
+                "occurrences": 3
+            },
+            {
+                "rule_id": "SMTP_NO_STARTTLS",
+                "title": "Cleartext SMTP Connection without STARTTLS",
+                "points_added": 20,
+                "occurrences": 1
+            },
+            {
+                "rule_id": "IMAP_NO_STARTTLS",
+                "title": "Cleartext IMAP Session",
+                "points_added": 20,
+                "occurrences": 1
+            },
+            {
+                "rule_id": "POP3_NO_STLS",
+                "title": "Cleartext POP3 Session",
+                "points_added": 20,
+                "occurrences": 1
+            }
+        ]
+    },
+    "ml_analysis": {
+        "model_name": "IsolationForest",
+        "model_version": "3.0.0",
+        "feature_schema_version": "1.0.0",
+        "total_anomalies_detected": 4,
+        "results": [
+            {
+                "model_name": "IsolationForest",
+                "model_version": "3.0.0",
+                "feature_schema_version": "1.0.0",
+                "raw_score": -0.187337,
+                "anomaly_score": 0.6873,
+                "ml_anomaly_score": 0.6873,
+                "threshold": -0.041466,
+                "is_anomaly": true,
+                "feature_values_used": {
+                    "client_bytes_log": 3.6109,
+                    "server_bytes_log": 4.0604,
+                    "client_packets_log": 1.6094,
+                    "server_packets_log": 1.3863,
+                    "duration_log": 0.0007,
+                    "bytes_ratio": 0.6207,
+                    "packets_ratio": 1.0,
+                    "certificate_key_size_scaled": 0.0,
+                    "tls_established_flag": 0.0,
+                    "forward_secrecy_flag": 0.0,
+                    "protocol_cat__SMTP": 1.0,
+                    "protocol_cat__IMAP": 0.0,
+                    "protocol_cat__POP3": 0.0,
+                    "protocol_cat__UNKNOWN": 0.0,
+                    "tls_version_cat__TLSv13": 0.0,
+                    "tls_version_cat__TLSv12": 0.0,
+                    "tls_version_cat__TLSv11": 0.0,
+                    "tls_version_cat__TLSv10": 0.0,
+                    "tls_version_cat__SSLv3": 0.0,
+                    "tls_version_cat__UNKNOWN": 1.0,
+                    "cipher_suite_cat__TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384": 0.0,
+                    "cipher_suite_cat__TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256": 0.0,
+                    "cipher_suite_cat__TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384": 0.0,
+                    "cipher_suite_cat__TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256": 0.0,
+                    "cipher_suite_cat__TLS_AES_256_GCM_SHA384": 0.0,
+                    "cipher_suite_cat__TLS_AES_128_GCM_SHA256": 0.0,
+                    "cipher_suite_cat__UNKNOWN": 1.0,
+                    "elliptic_curve_cat__x25519": 0.0,
+                    "elliptic_curve_cat__secp256r1": 0.0,
+                    "elliptic_curve_cat__secp384r1": 0.0,
+                    "elliptic_curve_cat__secp521r1": 0.0,
+                    "elliptic_curve_cat__UNKNOWN": 1.0
+                },
+                "training_source": "PCAP/Zeek deployment corpus",
+                "integrity_status": "VERIFIED_OK",
+                "evaluation_status": "Unsupervised baseline. No independent ground-truth anomaly labels available. Precision, recall, F1, and FPR/FNR NOT claimed.",
+                "explanation": "Observed flow volume and/or cryptographic/session characteristics differ statistically from the deployment baseline. Zero values noted for: certificate key size scaled (these may be missing or unobserved in the passive capture). An ML anomaly does NOT automatically constitute a security vulnerability \u2014 consult the deterministic security findings for policy-level assessment.",
+                "anomalous_features": []
+            },
+            {
+                "model_name": "IsolationForest",
+                "model_version": "3.0.0",
+                "feature_schema_version": "1.0.0",
+                "raw_score": -0.108213,
+                "anomaly_score": 0.6082,
+                "ml_anomaly_score": 0.6082,
+                "threshold": -0.041466,
+                "is_anomaly": true,
+                "feature_values_used": {
+                    "client_bytes_log": 6.0259,
+                    "server_bytes_log": 7.517,
+                    "client_packets_log": 2.8904,
+                    "server_packets_log": 2.7726,
+                    "duration_log": 0.2624,
+                    "bytes_ratio": 0.2246,
+                    "packets_ratio": 1.0625,
+                    "certificate_key_size_scaled": 0.5,
+                    "tls_established_flag": 1.0,
+                    "forward_secrecy_flag": 1.0,
+                    "protocol_cat__SMTP": 0.0,
+                    "protocol_cat__IMAP": 1.0,
+                    "protocol_cat__POP3": 0.0,
+                    "protocol_cat__UNKNOWN": 0.0,
+                    "tls_version_cat__TLSv13": 0.0,
+                    "tls_version_cat__TLSv12": 1.0,
+                    "tls_version_cat__TLSv11": 0.0,
+                    "tls_version_cat__TLSv10": 0.0,
+                    "tls_version_cat__SSLv3": 0.0,
+                    "tls_version_cat__UNKNOWN": 0.0,
+                    "cipher_suite_cat__TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384": 1.0,
+                    "cipher_suite_cat__TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256": 0.0,
+                    "cipher_suite_cat__TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384": 0.0,
+                    "cipher_suite_cat__TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256": 0.0,
+                    "cipher_suite_cat__TLS_AES_256_GCM_SHA384": 0.0,
+                    "cipher_suite_cat__TLS_AES_128_GCM_SHA256": 0.0,
+                    "cipher_suite_cat__UNKNOWN": 0.0,
+                    "elliptic_curve_cat__x25519": 1.0,
+                    "elliptic_curve_cat__secp256r1": 0.0,
+                    "elliptic_curve_cat__secp384r1": 0.0,
+                    "elliptic_curve_cat__secp521r1": 0.0,
+                    "elliptic_curve_cat__UNKNOWN": 0.0
+                },
+                "training_source": "PCAP/Zeek deployment corpus",
+                "integrity_status": "VERIFIED_OK",
+                "evaluation_status": "Unsupervised baseline. No independent ground-truth anomaly labels available. Precision, recall, F1, and FPR/FNR NOT claimed.",
+                "explanation": "Observed flow volume and/or cryptographic/session characteristics differ statistically from the deployment baseline. An ML anomaly does NOT automatically constitute a security vulnerability \u2014 consult the deterministic security findings for policy-level assessment.",
+                "anomalous_features": []
+            },
+            {
+                "model_name": "IsolationForest",
+                "model_version": "3.0.0",
+                "feature_schema_version": "1.0.0",
+                "raw_score": -0.108213,
+                "anomaly_score": 0.6082,
+                "ml_anomaly_score": 0.6082,
+                "threshold": -0.041466,
+                "is_anomaly": true,
+                "feature_values_used": {
+                    "client_bytes_log": 6.0162,
+                    "server_bytes_log": 7.4793,
+                    "client_packets_log": 2.8904,
+                    "server_packets_log": 2.7726,
+                    "duration_log": 0.2624,
+                    "bytes_ratio": 0.2309,
+                    "packets_ratio": 1.0625,
+                    "certificate_key_size_scaled": 0.5,
+                    "tls_established_flag": 1.0,
+                    "forward_secrecy_flag": 1.0,
+                    "protocol_cat__SMTP": 0.0,
+                    "protocol_cat__IMAP": 0.0,
+                    "protocol_cat__POP3": 1.0,
+                    "protocol_cat__UNKNOWN": 0.0,
+                    "tls_version_cat__TLSv13": 0.0,
+                    "tls_version_cat__TLSv12": 1.0,
+                    "tls_version_cat__TLSv11": 0.0,
+                    "tls_version_cat__TLSv10": 0.0,
+                    "tls_version_cat__SSLv3": 0.0,
+                    "tls_version_cat__UNKNOWN": 0.0,
+                    "cipher_suite_cat__TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384": 1.0,
+                    "cipher_suite_cat__TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256": 0.0,
+                    "cipher_suite_cat__TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384": 0.0,
+                    "cipher_suite_cat__TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256": 0.0,
+                    "cipher_suite_cat__TLS_AES_256_GCM_SHA384": 0.0,
+                    "cipher_suite_cat__TLS_AES_128_GCM_SHA256": 0.0,
+                    "cipher_suite_cat__UNKNOWN": 0.0,
+                    "elliptic_curve_cat__x25519": 1.0,
+                    "elliptic_curve_cat__secp256r1": 0.0,
+                    "elliptic_curve_cat__secp384r1": 0.0,
+                    "elliptic_curve_cat__secp521r1": 0.0,
+                    "elliptic_curve_cat__UNKNOWN": 0.0
+                },
+                "training_source": "PCAP/Zeek deployment corpus",
+                "integrity_status": "VERIFIED_OK",
+                "evaluation_status": "Unsupervised baseline. No independent ground-truth anomaly labels available. Precision, recall, F1, and FPR/FNR NOT claimed.",
+                "explanation": "Observed flow volume and/or cryptographic/session characteristics differ statistically from the deployment baseline. An ML anomaly does NOT automatically constitute a security vulnerability \u2014 consult the deterministic security findings for policy-level assessment.",
+                "anomalous_features": []
+            },
+            {
+                "model_name": "IsolationForest",
+                "model_version": "3.0.0",
+                "feature_schema_version": "1.0.0",
+                "raw_score": -0.108213,
+                "anomaly_score": 0.6082,
+                "ml_anomaly_score": 0.6082,
+                "threshold": -0.041466,
+                "is_anomaly": true,
+                "feature_values_used": {
+                    "client_bytes_log": 6.0186,
+                    "server_bytes_log": 7.4827,
+                    "client_packets_log": 2.8904,
+                    "server_packets_log": 2.7726,
+                    "duration_log": 0.2624,
+                    "bytes_ratio": 0.2307,
+                    "packets_ratio": 1.0625,
+                    "certificate_key_size_scaled": 0.5,
+                    "tls_established_flag": 1.0,
+                    "forward_secrecy_flag": 1.0,
+                    "protocol_cat__SMTP": 1.0,
+                    "protocol_cat__IMAP": 0.0,
+                    "protocol_cat__POP3": 0.0,
+                    "protocol_cat__UNKNOWN": 0.0,
+                    "tls_version_cat__TLSv13": 0.0,
+                    "tls_version_cat__TLSv12": 1.0,
+                    "tls_version_cat__TLSv11": 0.0,
+                    "tls_version_cat__TLSv10": 0.0,
+                    "tls_version_cat__SSLv3": 0.0,
+                    "tls_version_cat__UNKNOWN": 0.0,
+                    "cipher_suite_cat__TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384": 1.0,
+                    "cipher_suite_cat__TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256": 0.0,
+                    "cipher_suite_cat__TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384": 0.0,
+                    "cipher_suite_cat__TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256": 0.0,
+                    "cipher_suite_cat__TLS_AES_256_GCM_SHA384": 0.0,
+                    "cipher_suite_cat__TLS_AES_128_GCM_SHA256": 0.0,
+                    "cipher_suite_cat__UNKNOWN": 0.0,
+                    "elliptic_curve_cat__x25519": 1.0,
+                    "elliptic_curve_cat__secp256r1": 0.0,
+                    "elliptic_curve_cat__secp384r1": 0.0,
+                    "elliptic_curve_cat__secp521r1": 0.0,
+                    "elliptic_curve_cat__UNKNOWN": 0.0
+                },
+                "training_source": "PCAP/Zeek deployment corpus",
+                "integrity_status": "VERIFIED_OK",
+                "evaluation_status": "Unsupervised baseline. No independent ground-truth anomaly labels available. Precision, recall, F1, and FPR/FNR NOT claimed.",
+                "explanation": "Observed flow volume and/or cryptographic/session characteristics differ statistically from the deployment baseline. An ML anomaly does NOT automatically constitute a security vulnerability \u2014 consult the deterministic security findings for policy-level assessment.",
+                "anomalous_features": []
+            }
+        ]
+    },
+    "session_explanations": [
+        {
+            "session_uid": "CjzLHc2UPLt9WIoIVe",
+            "session_summary": "SMTP session from 192.168.1.10:50000 to 192.168.1.20:25",
+            "risk_score": 20,
+            "risk_level": "LOW",
+            "ml_anomaly": true,
+            "ml_anomaly_score": 0.6873,
+            "why_suspicious": [
+                "Cleartext SMTP Connection without STARTTLS (HIGH)",
+                "[Statistical ML Anomaly] Observed flow volume and/or cryptographic/session characteristics differ statistically from the deployment baseline. Zero values noted for: certificate key size scaled (these may be missing or unobserved in the passive capture). An ML anomaly does NOT automatically constitute a security vulnerability \u2014 consult the deterministic security findings for policy-level assessment."
+            ],
+            "evidence_breakdown": [
+                "No STARTTLS/STLS negotiation detected."
+            ],
+            "security_impact": "Eavesdroppers and active network adversaries can read, modify, or inject email messages, credentials, and headers in transit.",
+            "recommended_action_plan": [
+                "Reconfigure SMTP MTA (PostFix, Exim, Sendmail) to mandate STARTTLS: `smtpd_tls_security_level = encrypt`."
+            ]
+        },
+        {
+            "session_uid": "CgWrPJ1PvtafNJuHb9",
+            "session_summary": "IMAP session from 192.168.1.50:54322 to 192.168.1.20:143",
+            "risk_score": 35,
+            "risk_level": "LOW",
+            "ml_anomaly": true,
+            "ml_anomaly_score": 0.6082,
+            "why_suspicious": [
+                "Cleartext IMAP Session (HIGH)",
+                "Self-Signed Certificate in Use (MEDIUM)",
+                "[Statistical ML Anomaly] Observed flow volume and/or cryptographic/session characteristics differ statistically from the deployment baseline. An ML anomaly does NOT automatically constitute a security vulnerability \u2014 consult the deterministic security findings for policy-level assessment."
+            ],
+            "evidence_breakdown": [
+                "No STARTTLS/STLS negotiation detected.",
+                "TLS Version: TLSv12, Cipher: TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
+                "Certificate Subject: CN=mail.example.local,OU=Security,O=EmailForensicsTest,L=SanFrancisco,ST=California,C=US, Issuer: CN=mail.example.local,OU=Security,O=EmailForensicsTest,L=SanFrancisco,ST=California,C=US, Key Length: 2048 bits"
+            ],
+            "security_impact": "Mailbox contents and user authentication credentials are exposed to passive eavesdropping. Clients cannot verify server identity, exposing connections to Man-in-the-Middle (MITM) spoofing.",
+            "recommended_action_plan": [
+                "Disable plaintext port 143 or enforce STARTTLS / implicit TLS on port 993.",
+                "Replace self-signed certificate with an X.509 certificate issued by a trusted public CA (e.g. Let's Encrypt) or internal enterprise PKI."
+            ]
+        },
+        {
+            "session_uid": "Cls5Ux3vMjU8V5BxQ7",
+            "session_summary": "POP3 session from 192.168.1.50:54323 to 192.168.1.20:110",
+            "risk_score": 35,
+            "risk_level": "LOW",
+            "ml_anomaly": true,
+            "ml_anomaly_score": 0.6082,
+            "why_suspicious": [
+                "Cleartext POP3 Session (HIGH)",
+                "Self-Signed Certificate in Use (MEDIUM)",
+                "[Statistical ML Anomaly] Observed flow volume and/or cryptographic/session characteristics differ statistically from the deployment baseline. An ML anomaly does NOT automatically constitute a security vulnerability \u2014 consult the deterministic security findings for policy-level assessment."
+            ],
+            "evidence_breakdown": [
+                "No STARTTLS/STLS negotiation detected.",
+                "TLS Version: TLSv12, Cipher: TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
+                "Certificate Subject: CN=mail.example.local,OU=Security,O=EmailForensicsTest,L=SanFrancisco,ST=California,C=US, Issuer: CN=mail.example.local,OU=Security,O=EmailForensicsTest,L=SanFrancisco,ST=California,C=US, Key Length: 2048 bits"
+            ],
+            "security_impact": "Email downloads and user credentials transmitted unencrypted. Clients cannot verify server identity, exposing connections to Man-in-the-Middle (MITM) spoofing.",
+            "recommended_action_plan": [
+                "Disable plaintext port 110 or enforce STLS / implicit TLS on port 995.",
+                "Replace self-signed certificate with an X.509 certificate issued by a trusted public CA (e.g. Let's Encrypt) or internal enterprise PKI."
+            ]
+        },
+        {
+            "session_uid": "Cjxxth16yhCMYiG7j",
+            "session_summary": "SMTP session from 192.168.1.50:54321 to 192.168.1.20:25",
+            "risk_score": 15,
+            "risk_level": "MINIMAL",
+            "ml_anomaly": true,
+            "ml_anomaly_score": 0.6082,
+            "why_suspicious": [
+                "Self-Signed Certificate in Use (MEDIUM)",
+                "[Statistical ML Anomaly] Observed flow volume and/or cryptographic/session characteristics differ statistically from the deployment baseline. An ML anomaly does NOT automatically constitute a security vulnerability \u2014 consult the deterministic security findings for policy-level assessment."
+            ],
+            "evidence_breakdown": [
+                "STARTTLS/STLS command negotiated.",
+                "TLS Version: TLSv12, Cipher: TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
+                "Certificate Subject: CN=mail.example.local,OU=Security,O=EmailForensicsTest,L=SanFrancisco,ST=California,C=US, Issuer: CN=mail.example.local,OU=Security,O=EmailForensicsTest,L=SanFrancisco,ST=California,C=US, Key Length: 2048 bits"
+            ],
+            "security_impact": "Clients cannot verify server identity, exposing connections to Man-in-the-Middle (MITM) spoofing.",
+            "recommended_action_plan": [
+                "Replace self-signed certificate with an X.509 certificate issued by a trusted public CA (e.g. Let's Encrypt) or internal enterprise PKI."
+            ]
+        }
+    ],
+    "recommendations": [
+        {
+            "priority_step": 1,
+            "rule_id": "IMAP_NO_STARTTLS",
+            "severity": "HIGH",
+            "action_summary": "Cleartext IMAP Session",
+            "recommendation": "Disable plaintext port 143 or enforce STARTTLS / implicit TLS on port 993."
+        },
+        {
+            "priority_step": 2,
+            "rule_id": "POP3_NO_STLS",
+            "severity": "HIGH",
+            "action_summary": "Cleartext POP3 Session",
+            "recommendation": "Disable plaintext port 110 or enforce STLS / implicit TLS on port 995."
+        },
+        {
+            "priority_step": 3,
+            "rule_id": "SMTP_NO_STARTTLS",
+            "severity": "HIGH",
+            "action_summary": "Cleartext SMTP Connection without STARTTLS",
+            "recommendation": "Reconfigure SMTP MTA (PostFix, Exim, Sendmail) to mandate STARTTLS: `smtpd_tls_security_level = encrypt`."
+        },
+        {
+            "priority_step": 4,
+            "rule_id": "CERT_SELF_SIGNED",
+            "severity": "MEDIUM",
+            "action_summary": "Self-Signed Certificate in Use",
+            "recommendation": "Replace self-signed certificate with an X.509 certificate issued by a trusted public CA (e.g. Let's Encrypt) or internal enterprise PKI."
+        }
+    ],
+    "enterprise_posture": {
+        "enterprise_risk_score": 32.38,
+        "enterprise_risk_level": "LOW",
+        "total_email_sessions": 4,
+        "protocol_breakdown": {
+            "SMTP": 2,
+            "IMAP": 1,
+            "POP3": 1
+        },
+        "tls_version_distribution": {
+            "Plaintext / None": 1,
+            "TLSv12": 3
+        },
+        "cipher_suite_distribution": {
+            "None": 1,
+            "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384": 3
+        },
+        "server_distribution": {
+            "192.168.1.20:25": 2,
+            "192.168.1.20:143": 1,
+            "192.168.1.20:110": 1
+        },
+        "certificate_distribution": {
+            "CN=mail.example.local,OU=Security,O=EmailForensicsTest,L=SanFrancisco,ST=California,C=US": 3
+        },
+        "top_affected_systems": [
+            {
+                "server": "192.168.1.20:25",
+                "finding_count": 2
+            },
+            {
+                "server": "192.168.1.20:143",
+                "finding_count": 2
+            },
+            {
+                "server": "192.168.1.20:110",
+                "finding_count": 2
+            }
+        ],
+        "recurring_weaknesses": [
+            "3 session(s) utilize self-signed X.509 certificates.",
+            "3 session(s) operate without STARTTLS/STLS encryption."
+        ]
+    }
+}

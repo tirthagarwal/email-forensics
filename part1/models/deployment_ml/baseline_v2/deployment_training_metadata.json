@@ -1,0 +1,32 @@
+{
+  "model_name": "Deployment IsolationForest (baseline_v2)",
+  "model_version": "2.0.0",
+  "feature_schema_version": "1.0.0",
+  "random_seed": 42,
+  "n_estimators": 200,
+  "contamination": "auto",
+  "split_method": "grouped_by_pcap_source",
+  "train_groups_count": 3,
+  "val_groups_count": 1,
+  "test_groups_count": 0,
+  "training_rows": 3,
+  "validation_rows": 1,
+  "test_rows": 0,
+  "total_sessions": 4,
+  "threshold": 0.1716670360117476,
+  "validation_scores": {
+    "min": 0.1716670360117476,
+    "max": 0.1716670360117476,
+    "mean": 0.1716670360117476,
+    "p10": 0.1716670360117476
+  },
+  "test_scores": {},
+  "artifact_hashes_sha256": {
+    "deployment_isolation_forest.joblib": "69e393872aa7d3cc2b519afabd60a8f0edc9bd51c4907c21dfde6e8e97fe85e1",
+    "deployment_threshold.json": "38622752ce1e0de9cf02edba09cac6fd9463512ddebec627ffbe5be9637dd3e8",
+    "deployment_feature_schema.json": "3c2d5eb21801e225a877b1be4faf9e971addb0f880d6769b171b248bd8250dce"
+  },
+  "training_note": "Trained on 4 local PCAP sessions (baseline corpus).",
+  "labels_used": false,
+  "created_at": "2026-09-27T07:08:12Z"
+}

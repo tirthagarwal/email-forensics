@@ -1,0 +1,59 @@
+{
+  "dataset_version": "deployment_dataset_v4_clean",
+  "creation_time": "2026-09-28T20:31:32.880999+00:00",
+  "source_datasets": [
+    "passive_os",
+    "local_email_pcap"
+  ],
+  "source_types": {
+    "passive_os": "PUBLIC_DATASET",
+    "local_email_pcap": "LOCAL_PCAP"
+  },
+  "record_count": 10898,
+  "raw_record_count": 21796,
+  "removed_duplicate_count": 10898,
+  "unresolved_provenance_count": 0,
+  "group_count": 10898,
+  "train_count": 7629,
+  "validation_count": 1635,
+  "test_count": 1634,
+  "feature_schema_version": "1.0.0",
+  "random_state": 42,
+  "group_strategy": "capture_source_hierarchy",
+  "source_holdout_strategy": "group_aware_0_percent_overlap",
+  "missing_value_strategy": "documented_sentinels_zero_imputation",
+  "preprocessing": "log1p_and_standard_vocabulary_onehot",
+  "parent_dataset_versions": [
+    "expanded_v3",
+    "db_dataset_3.1.0-db"
+  ],
+  "split_summary": {
+    "total_samples": 10898,
+    "total_groups": 10898,
+    "train_samples": 7629,
+    "train_groups": 7629,
+    "train_sources": [
+      "local_email_pcap",
+      "passive_os"
+    ],
+    "val_samples": 1635,
+    "val_groups": 1635,
+    "val_sources": [
+      "passive_os"
+    ],
+    "test_samples": 1634,
+    "test_groups": 1634,
+    "test_sources": [
+      "passive_os"
+    ],
+    "holdout_sources_applied": []
+  },
+  "files": {
+    "train_records.json": "9178af99ff34cb9f65ac27d2af2817e258f9831a18d51a20197fcf7d7b92e185",
+    "val_records.json": "9b57ba23f1622c1102d4878aa31f9aa3fe284ff6f3755c512b5fe0e71b6c3a0b",
+    "test_records.json": "c2d89c977bee17db9f27e8de891d3e79cbf9362237434ca87ba934bc121ba503",
+    "schema.json": "f8d97a644c71f6ad67f1bf89f8504afb4f8868ac9b11dd28f23102ac8eec8afb",
+    "dataset.csv": "8d24b8386821668337cb11392626a15162bf20a6f14a964dabbd90faf795a690",
+    "provenance_manifest.json": "29b2e8dfe752d7f7da79c84afc4ceba58e331d7696c9470a91b0d89f8c8548d4"
+  }
+}

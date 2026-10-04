@@ -1,0 +1,27 @@
+{
+  "report_title": "Deployment ML Dataset Quality & Data Leakage Audit Report",
+  "generated_at": "2026-09-27T06:44:55Z",
+  "feature_schema_version": "1.0.0",
+  "total_records": 10898,
+  "source_breakdown": {
+    "local_pcaps": 4,
+    "passive_os_dataset": 10894
+  },
+  "unique_source_capture_ids": 10898,
+  "unique_feature_vectors": 10654,
+  "duplicate_feature_vector_count": 244,
+  "duplicate_feature_vector_rate": 0.0224,
+  "protocol_distribution": {
+    "IMAP": 1,
+    "POP3": 1,
+    "SMTP": 2,
+    "UNKNOWN": 10894
+  },
+  "feature_count": 32,
+  "data_leakage_audit": {
+    "group_aware_splitting_enabled": true,
+    "group_column": "source_capture_id",
+    "cross_group_leakage_prevented": true,
+    "exact_duplicate_policy": "Retained for distribution baseline; group-split prevents split cross-contamination."
+  }
+}

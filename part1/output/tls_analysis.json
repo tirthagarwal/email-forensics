@@ -1,0 +1,68 @@
+{
+    "log_directory": "part1/output/zeek_real_tls",
+    "total_sessions": 1,
+    "sessions": [
+        {
+            "uid": "CQ5Am03m8cLQbS9GZ4",
+            "timestamp": "1790403028.551956",
+            "connection": {
+                "source_ip": "192.168.1.50",
+                "source_port": 54321,
+                "destination_ip": "192.168.1.20",
+                "destination_port": 25,
+                "transport_protocol": "tcp",
+                "service": "smtp,ssl",
+                "duration": 0.38,
+                "client_bytes": 537,
+                "server_bytes": 1879,
+                "conn_state": "SF"
+            },
+            "email_protocol": {
+                "protocol": "SMTP",
+                "encryption_mode": "STARTTLS_ACCEPTED",
+                "starttls_attempted": true,
+                "starttls_accepted": true,
+                "implicit_tls": false,
+                "tls_established": true,
+                "authentication_observed": false,
+                "plaintext_auth_risk": false,
+                "extracted_commands": [],
+                "helo": "client.example.local",
+                "last_reply": "220 2.0.0 Ready to start TLS"
+            },
+            "tls": {
+                "version": "TLSv12",
+                "cipher": "TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384",
+                "curve": "x25519",
+                "server_name": "mail.example.local",
+                "established": true,
+                "validation_status": "self signed certificate",
+                "sni_matches_cert": true,
+                "ja3": null,
+                "ja3s": null,
+                "ja4": null,
+                "ja4s": null
+            },
+            "certificate": {
+                "fingerprint_sha256": "43a06b5986d1a0e94e00caa1f2f120bd464551afc8152e48e5096bafb684e0e8",
+                "subject": "CN=mail.example.local,OU=Security,O=EmailForensicsTest,L=SanFrancisco,ST=California,C=US",
+                "issuer": "CN=mail.example.local,OU=Security,O=EmailForensicsTest,L=SanFrancisco,ST=California,C=US",
+                "serial": "B918EB6DFE9D1412",
+                "not_valid_before": 1790402723.0,
+                "not_valid_after": 1821938723.0,
+                "key_algorithm": "rsaEncryption",
+                "signature_algorithm": "sha256WithRSAEncryption",
+                "key_type": "rsa",
+                "key_length": 2048,
+                "exponent": "65537"
+            },
+            "zeek_notices": [
+                {
+                    "note": "SSL::Invalid_Server_Cert",
+                    "msg": "SSL certificate validation failed with (self signed certificate)",
+                    "sub": "CN=mail.example.local,OU=Security,O=EmailForensicsTest,L=SanFrancisco,ST=California,C=US"
+                }
+            ]
+        }
+    ]
+}

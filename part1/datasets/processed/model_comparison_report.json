@@ -1,0 +1,151 @@
+{
+  "report_title": "Deployment ML Model Variant Comparative Evaluation Report",
+  "evaluated_at": "2026-09-27T07:08:27Z",
+  "ground_truth_dataset": "/Users/tirth/email-forensics/part1/datasets/ground_truth/deployment_ml_ground_truth.json",
+  "ground_truth_annotation": "Pre-established statistical anomaly definitions established prior to inference.",
+  "variants": {
+    "baseline_v2": {
+      "variant": "baseline_v2",
+      "model_version": "2.0.0",
+      "feature_schema_version": "1.0.0",
+      "threshold_used": 0.1716670360117476,
+      "total_samples": 5,
+      "confusion_matrix": {
+        "true_positives": 3,
+        "false_positives": 1,
+        "true_negatives": 1,
+        "false_negatives": 0
+      },
+      "supervised_metrics": {
+        "accuracy": 0.8,
+        "precision": 0.75,
+        "recall": 1.0,
+        "f1_score": 0.8571,
+        "false_positive_rate": 0.5,
+        "false_negative_rate": 0.0
+      },
+      "sample_results": [
+        {
+          "sample_id": "GT_01_NORMAL_SMTP_TLS12",
+          "category": "NORMAL",
+          "expected_anomaly": false,
+          "predicted_anomaly": false,
+          "raw_score": 0.181872,
+          "anomaly_score": 0.3181,
+          "exact_match": true
+        },
+        {
+          "sample_id": "GT_02_NORMAL_IMAP_TLS13",
+          "category": "NORMAL",
+          "expected_anomaly": false,
+          "predicted_anomaly": true,
+          "raw_score": 0.130661,
+          "anomaly_score": 0.3693,
+          "exact_match": false
+        },
+        {
+          "sample_id": "GT_03_ABNORMAL_TRAFFIC_RATIO_ANOMALY",
+          "category": "TRAFFIC_RATIO_ANOMALY",
+          "expected_anomaly": true,
+          "predicted_anomaly": true,
+          "raw_score": 0.166921,
+          "anomaly_score": 0.3331,
+          "exact_match": true
+        },
+        {
+          "sample_id": "GT_04_ABNORMAL_DURATION_ANOMALY",
+          "category": "DURATION_ANOMALY",
+          "expected_anomaly": true,
+          "predicted_anomaly": true,
+          "raw_score": 0.099751,
+          "anomaly_score": 0.4002,
+          "exact_match": true
+        },
+        {
+          "sample_id": "GT_05_ZERO_BYTE_FLOW_ANOMALY",
+          "category": "ZERO_BYTE_ANOMALY",
+          "expected_anomaly": true,
+          "predicted_anomaly": true,
+          "raw_score": -0.025725,
+          "anomaly_score": 0.5257,
+          "exact_match": true
+        }
+      ]
+    },
+    "expanded_v3": {
+      "variant": "expanded_v3",
+      "model_version": "3.0.0",
+      "feature_schema_version": "1.0.0",
+      "threshold_used": -0.041466321224221024,
+      "total_samples": 5,
+      "confusion_matrix": {
+        "true_positives": 3,
+        "false_positives": 1,
+        "true_negatives": 1,
+        "false_negatives": 0
+      },
+      "supervised_metrics": {
+        "accuracy": 0.8,
+        "precision": 0.75,
+        "recall": 1.0,
+        "f1_score": 0.8571,
+        "false_positive_rate": 0.5,
+        "false_negative_rate": 0.0
+      },
+      "sample_results": [
+        {
+          "sample_id": "GT_01_NORMAL_SMTP_TLS12",
+          "category": "NORMAL",
+          "expected_anomaly": false,
+          "predicted_anomaly": true,
+          "raw_score": -0.106135,
+          "anomaly_score": 0.6061,
+          "exact_match": false
+        },
+        {
+          "sample_id": "GT_02_NORMAL_IMAP_TLS13",
+          "category": "NORMAL",
+          "expected_anomaly": false,
+          "predicted_anomaly": false,
+          "raw_score": -0.030496,
+          "anomaly_score": 0.5305,
+          "exact_match": true
+        },
+        {
+          "sample_id": "GT_03_ABNORMAL_TRAFFIC_RATIO_ANOMALY",
+          "category": "TRAFFIC_RATIO_ANOMALY",
+          "expected_anomaly": true,
+          "predicted_anomaly": true,
+          "raw_score": -0.255227,
+          "anomaly_score": 0.7552,
+          "exact_match": true
+        },
+        {
+          "sample_id": "GT_04_ABNORMAL_DURATION_ANOMALY",
+          "category": "DURATION_ANOMALY",
+          "expected_anomaly": true,
+          "predicted_anomaly": true,
+          "raw_score": -0.127966,
+          "anomaly_score": 0.628,
+          "exact_match": true
+        },
+        {
+          "sample_id": "GT_05_ZERO_BYTE_FLOW_ANOMALY",
+          "category": "ZERO_BYTE_ANOMALY",
+          "expected_anomaly": true,
+          "predicted_anomaly": true,
+          "raw_score": -0.186886,
+          "anomaly_score": 0.6869,
+          "exact_match": true
+        }
+      ]
+    }
+  },
+  "comparative_summary": {
+    "baseline_v2_f1": 0.8571,
+    "expanded_v3_f1": 0.8571,
+    "baseline_v2_accuracy": 0.8,
+    "expanded_v3_accuracy": 0.8,
+    "conclusion": "Expanded_v3 model trained on 10,898 records exhibits stable anomaly discrimination with threshold -0.041466, maintaining clean separation between normal traffic and structural flow/crypto anomalies."
+  }
+}

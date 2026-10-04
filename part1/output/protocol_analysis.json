@@ -1,0 +1,42 @@
+{
+    "pcap_file": "part1/pcaps/smtp_test.pcap",
+    "total_packets": 7,
+    "detected_protocols": [
+        "SMTP"
+    ],
+    "starttls_detected": true,
+    "connections": [
+        {
+            "source": "192.168.1.10",
+            "source_port": 50000,
+            "destination": "192.168.1.20",
+            "destination_port": 25,
+            "protocol": "SMTP",
+            "commands": [
+                "EHLO",
+                "STARTTLS"
+            ],
+            "session_messages": [
+                {
+                    "direction": "server_to_client",
+                    "payload": "220 mail.example.com ESMTP"
+                },
+                {
+                    "direction": "client_to_server",
+                    "payload": "EHLO client.example.com"
+                },
+                {
+                    "direction": "client_to_server",
+                    "payload": "STARTTLS"
+                },
+                {
+                    "direction": "server_to_client",
+                    "payload": "220 2.0.0 Ready to start TLS"
+                }
+            ],
+            "packet_count": 7,
+            "bytes": 93,
+            "starttls_detected": true
+        }
+    ]
+}

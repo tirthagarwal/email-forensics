@@ -1,0 +1,92 @@
+{
+  "model_version": "3.2.0-db",
+  "model_variant": "db_historical_v1",
+  "algorithm": "IsolationForest",
+  "feature_schema_version": "1.0.0",
+  "training_dataset_version": "db_dataset_3.2.0-db",
+  "threshold": -0.06072064514542481,
+  "n_estimators": 200,
+  "random_state": 42,
+  "sample_count": 21796,
+  "split_summary": {
+    "total_samples": 21796,
+    "total_groups": 21796,
+    "train_samples": 15257,
+    "train_groups": 15257,
+    "train_sources": [
+      "expanded_deployment_dataset",
+      "local_email_pcap",
+      "passive_os"
+    ],
+    "val_samples": 3269,
+    "val_groups": 3269,
+    "val_sources": [
+      "expanded_deployment_dataset",
+      "local_email_pcap",
+      "passive_os"
+    ],
+    "test_samples": 3270,
+    "test_groups": 3270,
+    "test_sources": [
+      "expanded_deployment_dataset",
+      "passive_os"
+    ],
+    "holdout_sources_applied": []
+  },
+  "artifact_sha256": "bb0adc88f600293043dba953fd5d6ac7fe16d3493936e2fd53abccf018ef1ca8",
+  "validation_eval": {
+    "split_name": "validation",
+    "sample_count": 3269,
+    "evaluation_type": "Unsupervised evaluation \u2014 no independent anomaly ground truth",
+    "threshold": -0.06072064514542481,
+    "anomalies_detected": 327,
+    "anomaly_rate_percent": 10.0,
+    "scores_bounded": true,
+    "score_distribution": {
+      "min": -0.24074560675883927,
+      "max": 0.12336556437430285,
+      "mean": 0.0499304307894262,
+      "std": 0.06490921937381967,
+      "p5": -0.1081684160974776,
+      "p10": -0.06072064514542481,
+      "p50": 0.07016358359676106,
+      "p90": 0.10637288431072082,
+      "p95": 0.11534839186740334
+    }
+  },
+  "test_eval": {
+    "split_name": "test",
+    "sample_count": 3270,
+    "evaluation_type": "Unsupervised evaluation \u2014 no independent anomaly ground truth",
+    "threshold": -0.06072064514542481,
+    "anomalies_detected": 318,
+    "anomaly_rate_percent": 9.72,
+    "scores_bounded": true,
+    "score_distribution": {
+      "min": -0.2723713765735095,
+      "max": 0.12367588048857642,
+      "mean": 0.04983264702723396,
+      "std": 0.06542331727438432,
+      "p5": -0.10502745590893872,
+      "p10": -0.057375693837484774,
+      "p50": 0.07016358359676106,
+      "p90": 0.10688260540562146,
+      "p95": 0.11586416565291674
+    }
+  },
+  "benchmark_eval": {
+    "status": "EVALUATED_OK",
+    "benchmark_file": "labeled_ground_truth.json",
+    "sample_count": 5,
+    "threshold": -0.06072064514542481,
+    "tp": 0,
+    "fp": 2,
+    "tn": 0,
+    "fn": 3,
+    "precision": 0.0,
+    "recall": 0.0,
+    "f1_score": 0.0,
+    "fpr": 1.0,
+    "fnr": 1.0
+  }
+}

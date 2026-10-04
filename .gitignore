@@ -1,0 +1,35 @@
+# Virtual environments & Cache
+venv/
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+
+# Sensitive keylog files & Private Keys (NEVER COMMIT)
+*.key
+*.pem
+*.keylog
+*keylog*.txt
+!part1/test_fixtures/tls13_keylog_real.txt
+
+# Temporary Zeek Output Directories
+part1/output/zeek_train_cache/
+part1/output/zeek_unseen_cache/
+part1/output/zeek_real_tls/
+part1/output/test_zeek_tls13/
+
+# Web / Next.js
+web/node_modules/
+web/.next/
+web/out/
+.vercel
+
+# OS & Logs
+.DS_Store
+*.log
+local_sensor/__pycache__/
+
+# Large raw external datasets & local sqlite db
+part1/datasets/passive_os/
+*.db
+

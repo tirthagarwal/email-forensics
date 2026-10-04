@@ -1,0 +1,37 @@
+{
+  "model_name": "Deployment IsolationForest (expanded_v3)",
+  "model_version": "3.0.0",
+  "feature_schema_version": "1.0.0",
+  "random_seed": 42,
+  "n_estimators": 200,
+  "contamination": "auto",
+  "split_method": "grouped_by_pcap_source",
+  "train_groups_count": 7629,
+  "val_groups_count": 1635,
+  "test_groups_count": 1634,
+  "training_rows": 7629,
+  "validation_rows": 1635,
+  "test_rows": 1634,
+  "total_sessions": 10898,
+  "threshold": -0.041466321224221024,
+  "validation_scores": {
+    "min": -0.23746623152374435,
+    "max": 0.15333721949776136,
+    "mean": 0.0722701324394204,
+    "p10": -0.041466321224221024
+  },
+  "test_scores": {
+    "min": -0.2470608023382257,
+    "max": 0.15338146357142446,
+    "mean": 0.0695378151755624,
+    "flagged_anomalies": 169
+  },
+  "artifact_hashes_sha256": {
+    "deployment_isolation_forest.joblib": "587b165398eb9eb2ec82213699c5fb96bb67f85fdfd61467a021ae2befcbc791",
+    "deployment_threshold.json": "6ab6ec685fc522dc9f6ed86f9a465a2bfd6c8966ebfa2ee8a03b40769b4e88ac",
+    "deployment_feature_schema.json": "3c2d5eb21801e225a877b1be4faf9e971addb0f880d6769b171b248bd8250dce"
+  },
+  "training_note": "Trained on 10,898 records from local PCAPs and passive OS telemetry.",
+  "labels_used": false,
+  "created_at": "2026-09-27T07:08:12Z"
+}

@@ -1,0 +1,490 @@
+{
+    "report_metadata": {
+        "framework_name": "AI-Assisted Passive Network Forensic Framework for Email Cryptographic Security Posture Assessment",
+        "version": "1.0.0",
+        "generated_at": "2026-09-30T12:09:59Z",
+        "tls_keylog_supplied": false,
+        "tls_keylog_decryption_status": "NOT_APPLICABLE"
+    },
+    "pcap": {
+        "total_pcaps": 1,
+        "files_analyzed": [
+            "/Users/tirth/email-forensics/part1/pcaps/smtp_test.pcap"
+        ],
+        "analyzed_at": "2026-09-30T12:09:59Z",
+        "total_connections": 1
+    },
+    "summary": {
+        "total_pcaps": 1,
+        "total_sessions": 1,
+        "total_findings": 1,
+        "baseline_score": 20.0,
+        "cryptographic_score": 0.0,
+        "overall_risk_score": 20.0,
+        "score_delta": 0.0,
+        "risk_level": "LOW",
+        "total_ml_anomalies": 1
+    },
+    "security_assessment": {
+        "baseline_score": 20.0,
+        "cryptographic_score": 0.0,
+        "final_score": 20.0,
+        "score_delta": 0.0,
+        "controls": [
+            {
+                "control_id": "CTRL_EMAIL_PROTOCOL",
+                "category": "EMAIL_PROTOCOL",
+                "name": "Email Protocol Identification",
+                "observed": "Observed Protocols: SMTP",
+                "expected": "SMTP, IMAP, or POP3 protocol traffic",
+                "status": "PASS",
+                "status_symbol": "\u2713 PASS",
+                "severity": "INFO",
+                "why": "Email transport and retrieval protocol traffic successfully parsed from network capture.",
+                "evidence": "Total email sessions identified: 1 across protocols SMTP",
+                "recommendation": "Maintain continuous network monitoring on standard email ports.",
+                "score_contribution": 0
+            },
+            {
+                "control_id": "CTRL_STARTTLS",
+                "category": "TRANSPORT_SECURITY",
+                "name": "STARTTLS / STLS Upgrade Enforcement",
+                "observed": "Cleartext session(s) without STARTTLS/STLS upgrade (1 session(s))",
+                "expected": "STARTTLS / STLS Upgrade Enforced on All Cleartext Connections",
+                "status": "VIOLATION",
+                "status_symbol": "\u2715 VIOLATION",
+                "severity": "HIGH",
+                "why": "Session initiated in cleartext without requesting or accepting STARTTLS/STLS encryption upgrade.",
+                "evidence": "Findings: 192.168.1.10:50000 -> 192.168.1.20:25 (UID: CfuuRn4mped77PMcT4)",
+                "recommendation": "Configure email servers to enforce STARTTLS (SMTP/IMAP) and STLS (POP3) upgrades before handling mail.",
+                "score_contribution": 20
+            },
+            {
+                "control_id": "CTRL_PLAINTEXT_AUTH",
+                "category": "TRANSPORT_SECURITY",
+                "name": "Plaintext Authentication Protection",
+                "observed": "No authentication commands transmitted in cleartext",
+                "expected": "Authentication Commands Restricted to TLS Encrypted Sessions",
+                "status": "PASS",
+                "status_symbol": "\u2713 PASS",
+                "severity": "INFO",
+                "why": "No unencrypted authentication attempts were detected.",
+                "evidence": "All authentication commands occurred within encrypted TLS sessions.",
+                "recommendation": "Continue restricting AUTH commands to encrypted channels.",
+                "score_contribution": 0
+            },
+            {
+                "control_id": "CTRL_TLS_VERSION",
+                "category": "TLS_CONFIGURATION",
+                "name": "TLS Protocol Version Compliance",
+                "observed": "No TLS handshakes established in capture",
+                "expected": "TLS 1.2 or TLS 1.3",
+                "status": "NOT OBSERVED",
+                "status_symbol": "\u2014 NOT OBSERVED",
+                "severity": "INFO",
+                "why": "No TLS protocol handshakes were observed to evaluate TLS version compliance.",
+                "evidence": "0 TLS sessions in captured network traffic.",
+                "recommendation": "Enable TLS on email services.",
+                "score_contribution": 0
+            },
+            {
+                "control_id": "CTRL_CIPHER_SUITE",
+                "category": "CRYPTOGRAPHY",
+                "name": "Cipher Suite Security",
+                "observed": "No Cipher Suites Observed",
+                "expected": "Strong AEAD Cipher Suites (AES-GCM / CHACHA20-POLY1305)",
+                "status": "NOT OBSERVED",
+                "status_symbol": "\u2014 NOT OBSERVED",
+                "severity": "INFO",
+                "why": "No TLS cipher negotiation observed.",
+                "evidence": "No TLS sessions in capture.",
+                "recommendation": "Enable TLS on email endpoints.",
+                "score_contribution": 0
+            },
+            {
+                "control_id": "CTRL_FORWARD_SECRECY",
+                "category": "CRYPTOGRAPHY",
+                "name": "Perfect Forward Secrecy (PFS)",
+                "observed": "No TLS Key Exchange Observed",
+                "expected": "Ephemeral Key Exchange (ECDHE or DHE)",
+                "status": "NOT OBSERVED",
+                "status_symbol": "\u2014 NOT OBSERVED",
+                "severity": "INFO",
+                "why": "No TLS sessions available to evaluate key exchange mechanisms.",
+                "evidence": "0 TLS sessions observed.",
+                "recommendation": "Enable TLS with ECDHE key exchange.",
+                "score_contribution": 0
+            },
+            {
+                "control_id": "CTRL_ELLIPTIC_CURVE",
+                "category": "CRYPTOGRAPHY",
+                "name": "Elliptic Curve Selection",
+                "observed": "No TLS Key Exchange Observed",
+                "expected": "Standardized Curves (x25519, secp256r1, secp384r1)",
+                "status": "NOT OBSERVED",
+                "status_symbol": "\u2014 NOT OBSERVED",
+                "severity": "INFO",
+                "why": "Standardized curves provide performance and resistance against side-channel attacks.",
+                "evidence": "0 TLS sessions observed in traffic.",
+                "recommendation": "Maintain Curve25519 and P-256 support.",
+                "score_contribution": 0
+            },
+            {
+                "control_id": "CTRL_CERT_TRUST",
+                "category": "CERTIFICATE_SECURITY",
+                "name": "Certificate Trust & Authority",
+                "observed": "No X.509 Certificates Observed in Network Traffic",
+                "expected": "Certificate Issued by Recognized Public or Enterprise CA",
+                "status": "NOT OBSERVED",
+                "status_symbol": "\u2014 NOT OBSERVED",
+                "severity": "INFO",
+                "why": "No X.509 certificates were observed in the capture stream.",
+                "evidence": "0 certificates extracted from Zeek x509.log.",
+                "recommendation": "Ensure TLS certificates are deployed on mail servers.",
+                "score_contribution": 0
+            },
+            {
+                "control_id": "CTRL_CERT_VALIDITY",
+                "category": "CERTIFICATE_SECURITY",
+                "name": "Certificate Lifetime & Expiration",
+                "observed": "No Certificate Validity Data",
+                "expected": "Active Certificate Within Valid Lifetime",
+                "status": "NOT OBSERVED",
+                "status_symbol": "\u2014 NOT OBSERVED",
+                "severity": "INFO",
+                "why": "No X.509 certificates available to check validity.",
+                "evidence": "0 certificates observed.",
+                "recommendation": "Deploy valid TLS certificates.",
+                "score_contribution": 0
+            },
+            {
+                "control_id": "CTRL_CERT_HOSTNAME",
+                "category": "CERTIFICATE_SECURITY",
+                "name": "Certificate Hostname & SNI Alignment",
+                "observed": "No SNI / Hostname Data",
+                "expected": "Target Server FQDN Matches Certificate SAN / Subject",
+                "status": "NOT OBSERVED",
+                "status_symbol": "\u2014 NOT OBSERVED",
+                "severity": "INFO",
+                "why": "No TLS certificates available to check SNI matching.",
+                "evidence": "0 certificates observed.",
+                "recommendation": "Ensure SNI matching is configured.",
+                "score_contribution": 0
+            },
+            {
+                "control_id": "CTRL_CERT_KEY_SIZE",
+                "category": "CERTIFICATE_SECURITY",
+                "name": "Public Key Size Compliance",
+                "observed": "No Public Key Data",
+                "expected": "RSA >= 2048-bit or ECC >= 256-bit",
+                "status": "NOT OBSERVED",
+                "status_symbol": "\u2014 NOT OBSERVED",
+                "severity": "INFO",
+                "why": "No X.509 certificates observed.",
+                "evidence": "0 certificates observed.",
+                "recommendation": "Use RSA 2048+ or ECC keys.",
+                "score_contribution": 0
+            },
+            {
+                "control_id": "CTRL_CERT_SIG_ALG",
+                "category": "CERTIFICATE_SECURITY",
+                "name": "Signature Algorithm Security",
+                "observed": "No Signature Algorithm Data",
+                "expected": "SHA-256, SHA-384, or SHA-512",
+                "status": "NOT OBSERVED",
+                "status_symbol": "\u2014 NOT OBSERVED",
+                "severity": "INFO",
+                "why": "No X.509 certificates observed.",
+                "evidence": "0 certificates observed.",
+                "recommendation": "Use SHA-256+ signature algorithms.",
+                "score_contribution": 0
+            },
+            {
+                "control_id": "CTRL_FINGERPRINTING",
+                "category": "FINGERPRINTING",
+                "name": "TLS Client / Server Fingerprinting (JA3 / JA4)",
+                "observed": "NOT AVAILABLE IN CAPTURE (Optional Zeek Fingerprint Package Not Installed)",
+                "expected": "JA3 / JA3S / JA4 Fingerprint String for Client/Server Profiling",
+                "status": "NOT OBSERVED",
+                "status_symbol": "\u2014 NOT OBSERVED",
+                "severity": "INFO",
+                "why": "JA3 and JA4 fingerprinting require optional Zeek package extensions which were not active during capture logging.",
+                "evidence": "Fields ja3: null, ja3s: null, ja4: null, ja4s: null across all captured sessions.",
+                "recommendation": "If client fingerprinting is required, install zeek-ja3 or zeek-ja4 packages in the Zeek deployment.",
+                "score_contribution": 0
+            }
+        ],
+        "violations": [
+            {
+                "control_id": "CTRL_STARTTLS",
+                "category": "TRANSPORT_SECURITY",
+                "name": "STARTTLS / STLS Upgrade Enforcement",
+                "observed": "Cleartext session(s) without STARTTLS/STLS upgrade (1 session(s))",
+                "expected": "STARTTLS / STLS Upgrade Enforced on All Cleartext Connections",
+                "status": "VIOLATION",
+                "status_symbol": "\u2715 VIOLATION",
+                "severity": "HIGH",
+                "why": "Session initiated in cleartext without requesting or accepting STARTTLS/STLS encryption upgrade.",
+                "evidence": "Findings: 192.168.1.10:50000 -> 192.168.1.20:25 (UID: CfuuRn4mped77PMcT4)",
+                "recommendation": "Configure email servers to enforce STARTTLS (SMTP/IMAP) and STLS (POP3) upgrades before handling mail.",
+                "score_contribution": 20
+            }
+        ],
+        "risk_contributors": [
+            {
+                "rule_id": "SMTP_NO_STARTTLS",
+                "title": "Cleartext SMTP Connection without STARTTLS",
+                "points_added": 20,
+                "occurrences": 1
+            }
+        ]
+    },
+    "connections": [
+        {
+            "uid": "CfuuRn4mped77PMcT4",
+            "pcap_source": "/Users/tirth/email-forensics/part1/pcaps/smtp_test.pcap",
+            "source": "192.168.1.10:50000",
+            "destination": "192.168.1.20:25",
+            "protocol": "tcp",
+            "service": "smtp",
+            "duration_seconds": 0.000668,
+            "client_bytes": 36,
+            "server_bytes": 57,
+            "conn_state": "S1"
+        }
+    ],
+    "email_sessions": [
+        {
+            "uid": "CfuuRn4mped77PMcT4",
+            "protocol": "SMTP",
+            "encryption_mode": "PLAINTEXT",
+            "starttls_attempted": false,
+            "starttls_accepted": false,
+            "implicit_tls": false,
+            "tls_established": false,
+            "authentication_observed": false,
+            "plaintext_auth_risk": false,
+            "extracted_commands": [],
+            "tls_version": null,
+            "cipher_suite": null,
+            "ml_anomaly_score": 0.6873
+        }
+    ],
+    "tls_sessions": [],
+    "certificates": [],
+    "cryptographic_features": [
+        {
+            "uid": "CfuuRn4mped77PMcT4",
+            "protocol": "SMTP",
+            "starttls_detected": false,
+            "starttls_accepted": false,
+            "implicit_tls": false,
+            "tls_established": false,
+            "authentication_observed": false,
+            "plaintext_auth_risk": false,
+            "server_name": null,
+            "tls_version": null,
+            "cipher_suite": null,
+            "elliptic_curve": null,
+            "key_exchange": null,
+            "forward_secrecy_indicator": null,
+            "weak_tls_version": null,
+            "weak_cipher": null,
+            "weak_key_exchange": null,
+            "weak_curve": null,
+            "certificate_visibility_status": "NOT_OBSERVED",
+            "certificate_visibility_reason": "No certificate evidence associated with TLS session",
+            "certificate_public_key_algorithm": null,
+            "certificate_signature_algorithm": null,
+            "certificate_key_size": null,
+            "weak_key_size": null,
+            "weak_signature_algorithm": null,
+            "certificate_self_signed": null,
+            "certificate_expired": null,
+            "certificate_not_yet_valid": null,
+            "certificate_days_remaining": null,
+            "certificate_hostname_match": null,
+            "certificate_problem": false,
+            "missing_starttls": true,
+            "failed_starttls": false,
+            "deprecated_crypto": false,
+            "ja3": null,
+            "ja3s": null,
+            "ja4": null,
+            "ja4s": null,
+            "_client_bytes": 36,
+            "_server_bytes": 57,
+            "_client_packets": 4,
+            "_server_packets": 3,
+            "_duration": 0.000668
+        }
+    ],
+    "findings": [
+        {
+            "rule_id": "SMTP_NO_STARTTLS",
+            "severity": "HIGH",
+            "title": "Cleartext SMTP Connection without STARTTLS",
+            "description": "The SMTP session was established over plain TCP on port 25 or 587 without negotiating STARTTLS encryption.",
+            "evidence": "SMTP session on port 25 transmitted in cleartext without STARTTLS/STLS upgrade.",
+            "affected_connection": "192.168.1.10:50000 -> 192.168.1.20:25 (UID: CfuuRn4mped77PMcT4)",
+            "affected_protocol": "SMTP",
+            "confidence": "HIGH",
+            "security_impact": "Eavesdroppers and active network adversaries can read, modify, or inject email messages, credentials, and headers in transit.",
+            "references": [
+                "RFC 7590 (Use of TLS in Email Applications)",
+                "NIST SP 800-45 Rev 2 (Guidelines on Electronic Mail Security)"
+            ],
+            "recommendation": "Reconfigure SMTP MTA (PostFix, Exim, Sendmail) to mandate STARTTLS: `smtpd_tls_security_level = encrypt`.",
+            "technical_remediation": "Reconfigure SMTP MTA (PostFix, Exim, Sendmail) to mandate STARTTLS: `smtpd_tls_security_level = encrypt`."
+        }
+    ],
+    "finding_groups": {
+        "Unencrypted Transport Exposure": [
+            {
+                "rule_id": "SMTP_NO_STARTTLS",
+                "severity": "HIGH",
+                "title": "Cleartext SMTP Connection without STARTTLS",
+                "description": "The SMTP session was established over plain TCP on port 25 or 587 without negotiating STARTTLS encryption.",
+                "evidence": "SMTP session on port 25 transmitted in cleartext without STARTTLS/STLS upgrade.",
+                "affected_connection": "192.168.1.10:50000 -> 192.168.1.20:25 (UID: CfuuRn4mped77PMcT4)",
+                "affected_protocol": "SMTP",
+                "confidence": "HIGH",
+                "security_impact": "Eavesdroppers and active network adversaries can read, modify, or inject email messages, credentials, and headers in transit.",
+                "references": [
+                    "RFC 7590 (Use of TLS in Email Applications)",
+                    "NIST SP 800-45 Rev 2 (Guidelines on Electronic Mail Security)"
+                ],
+                "recommendation": "Reconfigure SMTP MTA (PostFix, Exim, Sendmail) to mandate STARTTLS: `smtpd_tls_security_level = encrypt`.",
+                "technical_remediation": "Reconfigure SMTP MTA (PostFix, Exim, Sendmail) to mandate STARTTLS: `smtpd_tls_security_level = encrypt`."
+            }
+        ]
+    },
+    "risk_assessment": {
+        "overall_risk_score": 20.0,
+        "risk_level": "LOW",
+        "max_session_score": 20,
+        "average_session_score": 20.0,
+        "contributors": [
+            {
+                "rule_id": "SMTP_NO_STARTTLS",
+                "title": "Cleartext SMTP Connection without STARTTLS",
+                "points_added": 20,
+                "occurrences": 1
+            }
+        ]
+    },
+    "ml_analysis": {
+        "model_name": "IsolationForest",
+        "model_version": "3.0.0",
+        "feature_schema_version": "1.0.0",
+        "total_anomalies_detected": 1,
+        "results": [
+            {
+                "model_name": "IsolationForest",
+                "model_version": "3.0.0",
+                "feature_schema_version": "1.0.0",
+                "raw_score": -0.187337,
+                "anomaly_score": 0.6873,
+                "ml_anomaly_score": 0.6873,
+                "threshold": -0.041466,
+                "is_anomaly": true,
+                "feature_values_used": {
+                    "client_bytes_log": 3.6109,
+                    "server_bytes_log": 4.0604,
+                    "client_packets_log": 1.6094,
+                    "server_packets_log": 1.3863,
+                    "duration_log": 0.0007,
+                    "bytes_ratio": 0.6207,
+                    "packets_ratio": 1.0,
+                    "certificate_key_size_scaled": 0.0,
+                    "tls_established_flag": 0.0,
+                    "forward_secrecy_flag": 0.0,
+                    "protocol_cat__SMTP": 1.0,
+                    "protocol_cat__IMAP": 0.0,
+                    "protocol_cat__POP3": 0.0,
+                    "protocol_cat__UNKNOWN": 0.0,
+                    "tls_version_cat__TLSv13": 0.0,
+                    "tls_version_cat__TLSv12": 0.0,
+                    "tls_version_cat__TLSv11": 0.0,
+                    "tls_version_cat__TLSv10": 0.0,
+                    "tls_version_cat__SSLv3": 0.0,
+                    "tls_version_cat__UNKNOWN": 1.0,
+                    "cipher_suite_cat__TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384": 0.0,
+                    "cipher_suite_cat__TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256": 0.0,
+                    "cipher_suite_cat__TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384": 0.0,
+                    "cipher_suite_cat__TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256": 0.0,
+                    "cipher_suite_cat__TLS_AES_256_GCM_SHA384": 0.0,
+                    "cipher_suite_cat__TLS_AES_128_GCM_SHA256": 0.0,
+                    "cipher_suite_cat__UNKNOWN": 1.0,
+                    "elliptic_curve_cat__x25519": 0.0,
+                    "elliptic_curve_cat__secp256r1": 0.0,
+                    "elliptic_curve_cat__secp384r1": 0.0,
+                    "elliptic_curve_cat__secp521r1": 0.0,
+                    "elliptic_curve_cat__UNKNOWN": 1.0
+                },
+                "training_source": "PCAP/Zeek deployment corpus",
+                "integrity_status": "VERIFIED_OK",
+                "evaluation_status": "Unsupervised baseline. No independent ground-truth anomaly labels available. Precision, recall, F1, and FPR/FNR NOT claimed.",
+                "explanation": "Observed flow volume and/or cryptographic/session characteristics differ statistically from the deployment baseline. Zero values noted for: certificate key size scaled (these may be missing or unobserved in the passive capture). An ML anomaly does NOT automatically constitute a security vulnerability \u2014 consult the deterministic security findings for policy-level assessment.",
+                "anomalous_features": []
+            }
+        ]
+    },
+    "session_explanations": [
+        {
+            "session_uid": "CfuuRn4mped77PMcT4",
+            "session_summary": "SMTP session from 192.168.1.10:50000 to 192.168.1.20:25",
+            "risk_score": 20,
+            "risk_level": "LOW",
+            "ml_anomaly": true,
+            "ml_anomaly_score": 0.6873,
+            "why_suspicious": [
+                "Cleartext SMTP Connection without STARTTLS (HIGH)",
+                "[Statistical ML Anomaly] Observed flow volume and/or cryptographic/session characteristics differ statistically from the deployment baseline. Zero values noted for: certificate key size scaled (these may be missing or unobserved in the passive capture). An ML anomaly does NOT automatically constitute a security vulnerability \u2014 consult the deterministic security findings for policy-level assessment."
+            ],
+            "evidence_breakdown": [
+                "No STARTTLS/STLS negotiation detected."
+            ],
+            "security_impact": "Eavesdroppers and active network adversaries can read, modify, or inject email messages, credentials, and headers in transit.",
+            "recommended_action_plan": [
+                "Reconfigure SMTP MTA (PostFix, Exim, Sendmail) to mandate STARTTLS: `smtpd_tls_security_level = encrypt`."
+            ]
+        }
+    ],
+    "recommendations": [
+        {
+            "priority_step": 1,
+            "rule_id": "SMTP_NO_STARTTLS",
+            "severity": "HIGH",
+            "action_summary": "Cleartext SMTP Connection without STARTTLS",
+            "recommendation": "Reconfigure SMTP MTA (PostFix, Exim, Sendmail) to mandate STARTTLS: `smtpd_tls_security_level = encrypt`."
+        }
+    ],
+    "enterprise_posture": {
+        "enterprise_risk_score": 20.0,
+        "enterprise_risk_level": "LOW",
+        "total_email_sessions": 1,
+        "protocol_breakdown": {
+            "SMTP": 1
+        },
+        "tls_version_distribution": {
+            "Plaintext / None": 1
+        },
+        "cipher_suite_distribution": {
+            "None": 1
+        },
+        "server_distribution": {
+            "192.168.1.20:25": 1
+        },
+        "certificate_distribution": {},
+        "top_affected_systems": [
+            {
+                "server": "192.168.1.20:25",
+                "finding_count": 1
+            }
+        ],
+        "recurring_weaknesses": [
+            "1 session(s) operate without STARTTLS/STLS encryption."
+        ]
+    }
+}
