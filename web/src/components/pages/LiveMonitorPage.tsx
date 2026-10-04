@@ -134,14 +134,14 @@ export default function LiveMonitorPage({ report, source }: LiveMonitorPageProps
         </p>
       </div>
 
-      {/* Remote mode note — shown when running from public Cloud Run deployment */}
-      {!!(process.env.NEXT_PUBLIC_FORENSIC_API_URL) && (
+      {/* Remote mode note — shown when running from public Vercel deployment */}
+      {typeof window !== 'undefined' && window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1' && (
         <div className="card border-blue/20 bg-blue/5 p-4 flex items-start gap-3 text-xs">
           <Radio className="w-4 h-4 text-blue flex-shrink-0 mt-0.5 opacity-70" />
           <div className="leading-relaxed text-text-muted space-y-1">
             <span className="font-semibold text-blue">Live Capture — Local / Enterprise Sensor Required</span>
             <p>
-              PCAP file analysis runs on the public Cloud Run forensic engine, but live packet capture
+              PCAP file analysis runs on the public Vercel forensic engine, but live packet capture
               requires a locally-running authorized sensor with direct network interface access. To use
               this tab, start{' '}
               <code className="text-cyber text-[11px]">venv/bin/python3 local_sensor/server.py</code>{' '}

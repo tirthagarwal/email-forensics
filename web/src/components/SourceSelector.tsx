@@ -35,8 +35,19 @@ interface SourceSelectorProps {
 
 const SENSOR_CANDIDATES = ['http://localhost:5001', 'http://127.0.0.1:5001']
 
-// Remote forensic engine (Cloud Run). Set NEXT_PUBLIC_FORENSIC_API_URL in Vercel env vars.
-const REMOTE_ENGINE_URL = (typeof process !== 'undefined' && process.env.NEXT_PUBLIC_FORENSIC_API_URL) || ''
+// Determine effective remote engine URL (explicit env var or same-origin on public deployment)
+export function getEffectiveRemoteEngineUrl(): string {
+  if (typeof process !== 'undefined' && process.env.NEXT_PUBLIC_FORENSIC_API_URL) {
+    return process.env.NEXT_PUBLIC_FORENSIC_API_URL
+  }
+  if (typeof window !== 'undefined') {
+    const host = window.location.hostname
+    if (host && host !== 'localhost' && host !== '127.0.0.1' && !host.startsWith('192.168.') && !host.startsWith('10.')) {
+      return window.location.origin
+    }
+  }
+  return ''
+}
 
 export default function SourceSelector({ onRun }: SourceSelectorProps) {
   const [sourceType, setSourceType] = useState<SourceType | null>(null)
@@ -97,8 +108,9 @@ export default function SourceSelector({ onRun }: SourceSelectorProps) {
     checkSensor()
   }, [checkSensor])
 
-  // Remote mode is available when Cloud Run URL is configured and local sensor is offline
-  const remoteAvailable = !!REMOTE_ENGINE_URL && sensorStatus === 'offline'
+  // Remote mode is available when running on public Vercel deployment or explicit remote URL is set
+  const effectiveRemoteUrl = getEffectiveRemoteEngineUrl()
+  const remoteAvailable = !!effectiveRemoteUrl && sensorStatus === 'offline'
 
   const isReady =
     (sensorStatus === 'online' || remoteAvailable) &&
@@ -358,7 +370,7 @@ export default function SourceSelector({ onRun }: SourceSelectorProps) {
                   Remote Forensic Engine Available
                 </div>
                 <div className="text-[11px] font-mono text-text-muted mt-0.5">
-                  Analysis will run on Cloud Run — no local sensor required
+                  Analysis will run on Vercel backend — no local sensor required
                 </div>
               </div>
             </div>

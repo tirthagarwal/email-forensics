@@ -1,7 +1,16 @@
 {
-  "buildCommand": "cd web && npm install && npm run build",
-  "outputDirectory": "web/out",
-  "framework": "nextjs",
-  "cleanUrls": true,
-  "trailingSlash": true
+  "version": 2,
+  "services": {
+    "backend": {
+      "root": ".",
+      "entrypoint": "Dockerfile.vercel"
+    }
+  },
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": { "service": "backend" } },
+    { "source": "/ping",    "destination": { "service": "backend" } },
+    { "source": "/health",  "destination": { "service": "backend" } },
+    { "source": "/analyze", "destination": { "service": "backend" } },
+    { "source": "/(.*)",    "destination": { "service": "backend" } }
+  ]
 }

@@ -19,8 +19,20 @@ import { ForensicReport } from '@/types/report'
 type AppState = 'initial' | 'running' | 'completed' | 'failed'
 
 const LOCAL_SENSOR_URL = 'http://localhost:5001'
-// Remote forensic engine (Cloud Run). Populated by NEXT_PUBLIC_FORENSIC_API_URL Vercel env var.
-const REMOTE_ENGINE_URL = process.env.NEXT_PUBLIC_FORENSIC_API_URL || ''
+
+// Remote forensic engine (Vercel backend or explicit env var)
+export function getEffectiveRemoteEngineUrl(): string {
+  if (typeof process !== 'undefined' && process.env.NEXT_PUBLIC_FORENSIC_API_URL) {
+    return process.env.NEXT_PUBLIC_FORENSIC_API_URL
+  }
+  if (typeof window !== 'undefined') {
+    const host = window.location.hostname
+    if (host && host !== 'localhost' && host !== '127.0.0.1' && !host.startsWith('192.168.') && !host.startsWith('10.')) {
+      return window.location.origin
+    }
+  }
+  return ''
+}
 
 const PIPELINE_STEPS: AnalysisStep[] = [
   { id: 'connect',  label: 'Connecting to forensic engine',           status: 'pending' },
@@ -87,8 +99,9 @@ export default function Home() {
     setAnalysisLogs([])
 
     // Determine mode: local sensor (verifiedSensorUrl provided) vs remote engine
-    const useRemote = !verifiedSensorUrl && !!REMOTE_ENGINE_URL
-    const targetUrl = verifiedSensorUrl || (useRemote ? REMOTE_ENGINE_URL : LOCAL_SENSOR_URL)
+    const effectiveRemoteUrl = getEffectiveRemoteEngineUrl()
+    const useRemote = !verifiedSensorUrl && !!effectiveRemoteUrl
+    const targetUrl = verifiedSensorUrl || (useRemote ? effectiveRemoteUrl : LOCAL_SENSOR_URL)
 
     // Step 1 — Connect / reach engine
     setStep('connect', 'running')
@@ -108,8 +121,8 @@ export default function Home() {
         addLog('ERROR: Remote forensic engine not reachable.')
         setFailedMessage(
           'Remote forensic engine is not reachable.\n\n' +
-          `URL: ${REMOTE_ENGINE_URL}\n\n` +
-          'Please check that the Cloud Run service is running and the URL is correct.\n' +
+          `URL: ${targetUrl}\n\n` +
+          'Please verify the Vercel backend deployment is active.\n' +
           'You can also run analysis locally:\n' +
           '  1. cd /path/to/email-forensics\n' +
           '  2. venv/bin/python3 local_sensor/server.py\n' +

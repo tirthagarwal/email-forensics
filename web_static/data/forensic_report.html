@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Email Cryptographic Security Posture Forensic Report</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #0f172a; color: #f8fafc; margin: 0; padding: 20px; }
+        .container { max-width: 1100px; margin: 0 auto; background-color: #1e293b; border-radius: 12px; padding: 30px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+        h1 { color: #38bdf8; border-bottom: 2px solid #334155; padding-bottom: 10px; font-size: 24px; }
+        h2 { color: #94a3b8; font-size: 18px; margin-top: 30px; border-bottom: 1px solid #334155; padding-bottom: 6px; }
+        .badge { display: inline-block; padding: 6px 14px; border-radius: 20px; font-weight: bold; color: white; background-color: #3b82f6; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 15px; }
+        .card { background-color: #0f172a; padding: 18px; border-radius: 8px; border: 1px solid #334155; }
+        .card-title { color: #64748b; font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
+        .card-value { font-size: 22px; font-weight: bold; margin-top: 5px; color: #f1f5f9; }
+        .v-card { background-color: #0f172a; border-left: 4px solid #ef4444; border-radius: 6px; padding: 14px; margin-bottom: 12px; border-top:1px solid #334155; border-right:1px solid #334155; border-bottom:1px solid #334155; }
+        .v-title { font-weight: bold; color: #f8fafc; font-size: 15px; margin-bottom: 6px; }
+        .v-meta { font-size: 12px; color: #94a3b8; margin-bottom: 6px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; background-color: #0f172a; border-radius: 8px; overflow: hidden; }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid #334155; font-size: 13px; }
+        th { background-color: #1e293b; color: #38bdf8; font-weight: 600; }
+        tr:hover { background-color: #1e293b; }
+        .status-VIOLATION { color: #ef4444; font-weight: bold; }
+        .status-WARNING { color: #fbbf24; font-weight: bold; }
+        .status-PASS { color: #34d399; font-weight: bold; }
+        .status-NOT-OBSERVED { color: #94a3b8; }
+        .footer { margin-top: 40px; text-align: center; color: #64748b; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>AI-Assisted Passive Email Cryptographic Security Posture Report</h1>
+        <p style="color: #94a3b8;">Analyzed Files: <code>part1/pcaps/smtp_test.pcap, part1/pcaps/imap_starttls_real.pcap, part1/pcaps/pop3_stls_real.pcap, part1/pcaps/smtp_starttls_real.pcap</code> | Generated: 2026-09-30T05:32:25Z</p>
+
+        <div class="grid">
+            <div class="card">
+                <div class="card-title">Final Risk Score</div>
+                <div class="card-value">32.38 / 100</div>
+            </div>
+            <div class="card">
+                <div class="card-title">Posture Risk Level</div>
+                <div class="card-value"><span class="badge">LOW</span></div>
+            </div>
+            <div class="card">
+                <div class="card-title">Baseline Score</div>
+                <div class="card-value">18.5</div>
+            </div>
+            <div class="card">
+                <div class="card-title">Crypto Score Δ</div>
+                <div class="card-value">+13.88</div>
+            </div>
+            <div class="card">
+                <div class="card-title">Total Email Sessions</div>
+                <div class="card-value">4</div>
+            </div>
+        </div>
+
+        <h2>Security Control Evaluation Summary</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Control Name</th>
+                    <th>Category</th>
+                    <th>Observed Value</th>
+                    <th>Expected Value</th>
+                    <th>Status</th>
+                    <th>Score Contribution</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td><b>Email Protocol Identification</b></td><td>EMAIL_PROTOCOL</td><td>Observed Protocols: IMAP, POP3, SMTP</td><td>SMTP, IMAP, or POP3 protocol traffic</td><td class='status-PASS'>✓ PASS</td><td>+0 pts</td></tr><tr><td><b>STARTTLS / STLS Upgrade Enforcement</b></td><td>TRANSPORT_SECURITY</td><td>Cleartext session(s) without STARTTLS/STLS upgrade (3 session(s))</td><td>STARTTLS / STLS Upgrade Enforced on All Cleartext Connections</td><td class='status-VIOLATION'>✕ VIOLATION</td><td>+60 pts</td></tr><tr><td><b>Plaintext Authentication Protection</b></td><td>TRANSPORT_SECURITY</td><td>No authentication commands transmitted in cleartext</td><td>Authentication Commands Restricted to TLS Encrypted Sessions</td><td class='status-PASS'>✓ PASS</td><td>+0 pts</td></tr><tr><td><b>TLS Protocol Version Compliance</b></td><td>TLS_CONFIGURATION</td><td>Modern TLS Version Negotiated (TLSv12)</td><td>TLS 1.2 or TLS 1.3</td><td class='status-PASS'>✓ PASS</td><td>+0 pts</td></tr><tr><td><b>Cipher Suite Security</b></td><td>CRYPTOGRAPHY</td><td>Strong Cipher Suite Negotiated (TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384)</td><td>Strong AEAD Cipher Suites (AES-GCM / CHACHA20-POLY1305)</td><td class='status-PASS'>✓ PASS</td><td>+0 pts</td></tr><tr><td><b>Perfect Forward Secrecy (PFS)</b></td><td>CRYPTOGRAPHY</td><td>Ephemeral Key Exchange (ECDHE/DHE) Negotiated (3/3 TLS sessions)</td><td>Ephemeral Key Exchange (ECDHE or DHE)</td><td class='status-PASS'>✓ PASS</td><td>+0 pts</td></tr><tr><td><b>Elliptic Curve Selection</b></td><td>CRYPTOGRAPHY</td><td>Elliptic Curve: x25519</td><td>Standardized Curves (x25519, secp256r1, secp384r1)</td><td class='status-PASS'>✓ PASS</td><td>+0 pts</td></tr><tr><td><b>Certificate Trust & Authority</b></td><td>CERTIFICATE_SECURITY</td><td>Self-Signed Certificate in Use (3 cert(s))</td><td>Certificate Issued by Recognized Public or Enterprise CA</td><td class='status-WARNING'>⚠ WARNING</td><td>+45 pts</td></tr><tr><td><b>Certificate Lifetime & Expiration</b></td><td>CERTIFICATE_SECURITY</td><td>Certificate Currently Active & Valid (approximately 361.02 days remaining)</td><td>Active Certificate Within Valid Lifetime</td><td class='status-PASS'>✓ PASS</td><td>+0 pts</td></tr><tr><td><b>Certificate Hostname & SNI Alignment</b></td><td>CERTIFICATE_SECURITY</td><td>mail.example.local → MATCH (Server SNI Matches Certificate Subject / SAN)</td><td>Target Server FQDN Matches Certificate SAN / Subject</td><td class='status-PASS'>✓ PASS</td><td>+0 pts</td></tr><tr><td><b>Public Key Size Compliance</b></td><td>CERTIFICATE_SECURITY</td><td>Sufficient Public Key Length (RSA 2048)</td><td>RSA >= 2048-bit or ECC >= 256-bit</td><td class='status-PASS'>✓ PASS</td><td>+0 pts</td></tr><tr><td><b>Signature Algorithm Security</b></td><td>CERTIFICATE_SECURITY</td><td>Strong Signature Algorithm (sha256WithRSAEncryption)</td><td>SHA-256, SHA-384, or SHA-512</td><td class='status-PASS'>✓ PASS</td><td>+0 pts</td></tr><tr><td><b>TLS Client / Server Fingerprinting (JA3 / JA4)</b></td><td>FINGERPRINTING</td><td>NOT AVAILABLE IN CAPTURE (Optional Zeek Fingerprint Package Not Installed)</td><td>JA3 / JA3S / JA4 Fingerprint String for Client/Server Profiling</td><td class='status-NOT-OBSERVED'>— NOT OBSERVED</td><td>+0 pts</td></tr>
+            </tbody>
+        </table>
+
+        <h2>Security Control Violations & Recommended Remediation</h2>
+        
+        <div class="v-card">
+            <div class="v-title">✕ VIOLATION STARTTLS / STLS Upgrade Enforcement (Severity: HIGH)</div>
+            <div class="v-meta"><b>Observed:</b> Cleartext session(s) without STARTTLS/STLS upgrade (3 session(s)) | <b>Expected:</b> STARTTLS / STLS Upgrade Enforced on All Cleartext Connections | <b>Risk Contribution:</b> +60 pts</div>
+            <div style="font-size:13px; color:#cbd5e1; margin-bottom:6px;"><b>Why:</b> Session initiated in cleartext without requesting or accepting STARTTLS/STLS encryption upgrade.</div>
+            <div style="font-size:12px; color:#94a3b8; font-family:monospace; margin-bottom:6px;"><b>Evidence:</b> Findings: 192.168.1.10:50000 -> 192.168.1.20:25 (UID: CLN5b81OesIxmf7YL); 192.168.1.50:54322 -> 192.168.1.20:143 (UID: C0q3MG2hSZwUgMGkui); 192.168.1.50:54323 -> 192.168.1.20:110 (UID: COSucv4asfd5IfQQDl)</div>
+            <div style="font-size:13px; color:#34d399;"><b>Recommended Action:</b> Configure email servers to enforce STARTTLS (SMTP/IMAP) and STLS (POP3) upgrades before handling mail.</div>
+        </div>
+        
+        <div class="v-card">
+            <div class="v-title">⚠ WARNING Certificate Trust & Authority (Severity: MEDIUM)</div>
+            <div class="v-meta"><b>Observed:</b> Self-Signed Certificate in Use (3 cert(s)) | <b>Expected:</b> Certificate Issued by Recognized Public or Enterprise CA | <b>Risk Contribution:</b> +45 pts</div>
+            <div style="font-size:13px; color:#cbd5e1; margin-bottom:6px;"><b>Why:</b> Self-signed certificates cannot be validated by standard public trust stores, introducing trust ambiguity for external mail clients.</div>
+            <div style="font-size:12px; color:#94a3b8; font-family:monospace; margin-bottom:6px;"><b>Evidence:</b> Evidence: Certificate subject 'CN=mail.example.local,OU=Security,O=EmailForensicsTest,L=SanFrancisco,ST=California,C=US' matches issuer.; Certificate subject 'CN=mail.example.local,OU=Security,O=EmailForensicsTest,L=SanFrancisco,ST=California,C=US' matches issuer.; Certificate subject 'CN=mail.example.local,OU=Security,O=EmailForensicsTest,L=SanFrancisco,ST=California,C=US' matches issuer.</div>
+            <div style="font-size:13px; color:#34d399;"><b>Recommended Action:</b> Deploy certificates issued by a trusted enterprise or public Certificate Authority.</div>
+        </div>
+        
+
+        <h2>Analyzed Email Sessions Inventory</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>UID</th>
+                    <th>Protocol</th>
+                    <th>Encryption Mode</th>
+                    <th>TLS Version</th>
+                    <th>Cipher Suite</th>
+                    <th>ML Anomaly Score</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>CLN5b81OesIxmf7YL</td><td>SMTP</td><td>PLAINTEXT</td><td>None</td><td>None</td><td>0.6873</td></tr><tr><td>C0q3MG2hSZwUgMGkui</td><td>IMAP</td><td>ENCRYPTED_TLS</td><td>TLSv12</td><td>TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384</td><td>0.6082</td></tr><tr><td>COSucv4asfd5IfQQDl</td><td>POP3</td><td>ENCRYPTED_TLS</td><td>TLSv12</td><td>TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384</td><td>0.6082</td></tr><tr><td>CwcIwQBfnYXhWHtx1</td><td>SMTP</td><td>STARTTLS_ACCEPTED</td><td>TLSv12</td><td>TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384</td><td>0.6082</td></tr>
+            </tbody>
+        </table>
+
+        <div class="footer">
+            <p>Generated by Passive Email Cryptographic Security Framework v1.0.0 | Offline Deterministic & ML Analysis Engine</p>
+        </div>
+    </div>
+</body>
+</html>

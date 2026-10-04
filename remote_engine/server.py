@@ -13,6 +13,7 @@ Endpoints:
 
 import argparse
 import json
+import mimetypes
 import os
 import shutil
 import subprocess
@@ -38,7 +39,7 @@ for p in [str(PROJECT_ROOT), str(PART1_SRC)]:
 from forensic_pipeline import analyze_pcap_files
 
 PORT = int(os.environ.get("PORT", 8000))
-MAX_UPLOAD_SIZE = 50 * 1024 * 1024  # 50 MB limit
+MAX_UPLOAD_SIZE = int(os.environ.get("MAX_UPLOAD_SIZE", 4 * 1024 * 1024))  # 4 MB limit for Vercel deployment
 
 # Standard PCAP and PCAPNG magic signatures
 PCAP_MAGIC_NUMBERS = [
@@ -62,6 +63,21 @@ def detect_zeek() -> dict:
         return {"available": False, "version": None, "error": "zeek binary not found in PATH"}
     except Exception as e:
         return {"available": False, "version": None, "error": str(e)}
+
+
+# Static frontend asset directories (built Next.js export)
+STATIC_DIRS = [
+    PROJECT_ROOT / "web_static",
+    PROJECT_ROOT / "web" / "out",
+    Path("/app/web_static"),
+]
+
+
+def find_static_dir() -> Path | None:
+    for d in STATIC_DIRS:
+        if d.is_dir() and (d / "index.html").is_file():
+            return d
+    return None
 
 
 class RemoteForensicHandler(BaseHTTPRequestHandler):
@@ -108,6 +124,25 @@ class RemoteForensicHandler(BaseHTTPRequestHandler):
         self.send_header("Content-Length", "0")
         self.end_headers()
 
+    def _serve_file(self, file_path: Path, status_code: int = 200):
+        try:
+            with open(file_path, "rb") as f:
+                content = f.read()
+            mime_type, _ = mimetypes.guess_type(str(file_path))
+            if not mime_type:
+                mime_type = "application/octet-stream"
+            if mime_type.startswith("text/") or mime_type in ("application/javascript", "application/json"):
+                mime_type += "; charset=utf-8"
+
+            self.send_response(status_code)
+            self._send_cors_headers()
+            self.send_header("Content-Type", mime_type)
+            self.send_header("Content-Length", str(len(content)))
+            self.end_headers()
+            self.wfile.write(content)
+        except Exception as e:
+            self._send_json_response(500, {"error": f"Failed to serve file: {e}"})
+
     def do_GET(self):
         path_clean = self.path.split("?")[0].rstrip("/")
         if not path_clean:
@@ -122,7 +157,7 @@ class RemoteForensicHandler(BaseHTTPRequestHandler):
             })
             return
 
-        if path_clean in ("/health", "/api/health", "/"):
+        if path_clean in ("/health", "/api/health"):
             zeek_info = detect_zeek()
             self._send_json_response(200, {
                 "status": "ok",
@@ -145,6 +180,42 @@ class RemoteForensicHandler(BaseHTTPRequestHandler):
                     "runtime_fallback": "Deterministic rules + metadata preservation active",
                 },
                 "server_time": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+            })
+            return
+
+        # Serve static web dashboard if bundled (Next.js static export)
+        static_dir = find_static_dir()
+        if static_dir:
+            req_path = self.path.split("?")[0]
+            clean_rel = req_path.lstrip("/")
+            if not clean_rel:
+                target_file = static_dir / "index.html"
+            else:
+                target_file = (static_dir / clean_rel).resolve()
+                # Security: prevent directory traversal
+                if not str(target_file).startswith(str(static_dir.resolve())):
+                    self._send_json_response(403, {"error": "Forbidden"})
+                    return
+                if target_file.is_dir():
+                    target_file = target_file / "index.html"
+
+            if target_file.is_file():
+                self._serve_file(target_file)
+                return
+
+            fallback_404 = static_dir / "404.html"
+            if fallback_404.is_file():
+                self._serve_file(fallback_404, status_code=404)
+                return
+
+        # Fallback if no static frontend: root returns health
+        if path_clean == "/":
+            zeek_info = detect_zeek()
+            self._send_json_response(200, {
+                "status": "ok",
+                "service": "email-forensics-remote-engine",
+                "message": "Forensic Engine API online.",
+                "zeek": zeek_info,
             })
             return
 
@@ -171,7 +242,8 @@ class RemoteForensicHandler(BaseHTTPRequestHandler):
 
             if content_length > MAX_UPLOAD_SIZE:
                 self._send_json_response(413, {
-                    "error": f"Payload Too Large: {content_length} bytes exceeds {MAX_UPLOAD_SIZE} bytes limit (50 MB)."
+                    "error": "PCAP is too large for the current Vercel deployment. Please use a PCAP smaller than 4 MB.",
+                    "details": f"Upload size {content_length} bytes exceeds {MAX_UPLOAD_SIZE} bytes limit."
                 })
                 return
 

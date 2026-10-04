@@ -1,0 +1,9 @@
+# Email Forensic Engine - Vercel Container Runtime Dependencies
+# Minimal requirements for forensic pipeline & remote engine execution
+numpy>=1.24.0
+scipy>=1.10.0
+scikit-learn>=1.2.0
+joblib>=1.2.0
+cryptography>=41.0.0
+scapy>=2.5.0
+reportlab>=4.0.0

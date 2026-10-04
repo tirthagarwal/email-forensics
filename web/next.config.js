@@ -2,6 +2,7 @@
 const nextConfig = {
   reactStrictMode: true,
   trailingSlash: true,
+  output: 'export',
   // Expose remote forensic engine URL to client bundle.
   // Set NEXT_PUBLIC_FORENSIC_API_URL in Vercel environment variables.
   env: {

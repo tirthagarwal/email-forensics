@@ -1,0 +1,82 @@
+# ==============================================================================
+# Email Forensics — Vercel Fluid Compute Container
+# Deploys the Python + Zeek forensic engine as a Vercel HTTP server.
+#
+# Vercel requirements:
+#   - Must be an HTTP server listening on $PORT (Vercel default: 80)
+#   - Must be stateless (no persistent disk)
+#   - Must respond to GET / for health probes
+# ==============================================================================
+
+FROM python:3.11-slim-bookworm
+
+# Labels
+LABEL maintainer="Email Forensics Team"
+LABEL description="Vercel Fluid Compute forensic engine: Python 3.11 + Zeek 9.x"
+LABEL version="2.0.0"
+
+# Container environment
+ENV DEBIAN_FRONTEND=noninteractive \
+    PYTHONUNBUFFERED=1 \
+    PYTHONDONTWRITEBYTECODE=1 \
+    APP_HOME=/app
+
+# PORT is injected by Vercel at runtime (defaults to 80 on Vercel)
+# Do not hardcode 8000 here — read from $PORT env at runtime.
+
+WORKDIR ${APP_HOME}
+
+# 1. System packages: Zeek 9.x from OpenSUSE OBS (Debian 12)
+#    libpcap-dev: needed for scapy
+#    ca-certificates + curl + gnupg: for OBS repo key
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates \
+    curl \
+    gnupg \
+    libpcap0.8 \
+    libpcap-dev \
+    && echo 'deb http://download.opensuse.org/repositories/security:/zeek/Debian_12/ /' \
+       > /etc/apt/sources.list.d/security:zeek.list \
+    && curl -fsSL \
+       https://download.opensuse.org/repositories/security:/zeek/Debian_12/Release.key \
+       | gpg --dearmor > /etc/apt/trusted.gpg.d/security_zeek.gpg \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends zeek-core \
+    || apt-get install -y --no-install-recommends zeek \
+    && apt-get purge -y curl gnupg \
+    && apt-get autoremove -y \
+    && rm -rf /var/lib/apt/lists/*
+
+# Ensure zeek is on PATH
+ENV PATH="/opt/zeek/bin:${PATH}"
+
+# 2. Minimal Python dependencies for the forensic engine
+#    Excludes dev-only packages (streamlit, altair, reportlab, sqlalchemy, pytest)
+COPY requirements.vercel.txt .
+RUN pip install --no-cache-dir -r requirements.vercel.txt
+
+# 3. Copy forensic source code and remote engine server
+COPY part1/src/ ./part1/src/
+COPY part1/pcaps/ ./part1/pcaps/
+COPY part1/models/ ./part1/models/
+COPY web_static/ ./web_static/
+COPY remote_engine/ ./remote_engine/
+
+# 4. Create non-root service user
+RUN useradd -m -u 1000 forensic \
+    && chown -R forensic:forensic ${APP_HOME}
+
+USER forensic
+
+# 5. Expose HTTP port (informational — Vercel injects $PORT at runtime)
+EXPOSE 80
+
+# 6. Healthcheck: probe /ping to verify server responsiveness
+HEALTHCHECK --interval=30s --timeout=10s --start-period=15s --retries=3 \
+    CMD python3 -c "\
+import urllib.request, os, sys; \
+port = os.environ.get('PORT', '80'); \
+sys.exit(0 if urllib.request.urlopen(f'http://localhost:{port}/ping').getcode() == 200 else 1)"
+
+# 7. Start: server reads PORT from environment (Vercel sets this)
+CMD ["python3", "remote_engine/server.py"]
