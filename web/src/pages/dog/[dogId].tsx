@@ -30,17 +30,17 @@ import { StatusBadge } from '../../components/StatusBadge'
 import { Navbar } from '../../components/Navbar'
 import { Footer } from '../../components/Footer'
 
-export default function PublicDogProfile() {
+export default function PublicDogProfile(props: { dogId?: string }) {
   const router = useRouter()
-  const { dogId } = router.query
+  const targetId = (router.query.dogId as string) || props.dogId || ''
   const { dogs, vaccinations, medicalRecords, sightings, currentUser } = useRescueAI()
   const [showReportSent, setShowReportSent] = useState(false)
 
   const dog = dogs.find(
     (d) =>
-      d.dog_id.toLowerCase() === String(dogId).toLowerCase() ||
-      d.id === String(dogId) ||
-      d.qr_tag_id.toLowerCase() === String(dogId).toLowerCase()
+      (targetId && d.dog_id.toLowerCase() === targetId.toLowerCase()) ||
+      d.id === targetId ||
+      (targetId && d.qr_tag_id.toLowerCase() === targetId.toLowerCase())
   )
 
   const dogVaccinations = vaccinations.filter((v) => v.dog_id === dog?.dog_id)
@@ -76,7 +76,7 @@ export default function PublicDogProfile() {
           <h1 className="text-2xl font-black text-charcoal-900">Dog Profile Not Found</h1>
           <p className="text-sm text-charcoal-600 leading-relaxed">
             We could not find a registered dog associated with{' '}
-            <strong className="font-mono bg-warm-200 px-1.5 py-0.5 rounded text-charcoal-900">{dogId}</strong>.
+            <strong className="font-mono bg-warm-200 px-1.5 py-0.5 rounded text-charcoal-900">{targetId}</strong>.
             <br />
             The QR code may be inactive, newly issued, or damaged.
           </p>

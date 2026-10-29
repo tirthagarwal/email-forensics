@@ -34,9 +34,9 @@ import { StatusBadge } from '../../../components/StatusBadge'
 import { PrintableCollarTag } from '../../../components/PrintableCollarTag'
 import { VaccinationRecord, MedicalRecord, HealthObservation } from '../../../lib/types'
 
-export default function IndividualDogProfilePage() {
+export default function IndividualDogProfilePage(props: { dogId?: string }) {
   const router = useRouter()
-  const { dogId } = router.query
+  const targetId = (router.query.dogId as string) || props.dogId || ''
 
   const {
     dogs,
@@ -56,8 +56,9 @@ export default function IndividualDogProfilePage() {
 
   const dog = dogs.find(
     (d) =>
-      d.dog_id.toLowerCase() === String(dogId).toLowerCase() ||
-      d.id === String(dogId)
+      (targetId && d.dog_id.toLowerCase() === targetId.toLowerCase()) ||
+      d.id === targetId ||
+      (targetId && d.qr_tag_id.toLowerCase() === targetId.toLowerCase())
   )
 
   const [activeTab, setActiveTab] = useState<
@@ -118,7 +119,7 @@ export default function IndividualDogProfilePage() {
           <AlertTriangle className="w-10 h-10 text-amber-600 mx-auto" />
           <h2 className="text-xl font-bold text-charcoal-900">Dog Record Not Found</h2>
           <p className="text-xs text-charcoal-500">
-            No dog record matches the identifier <strong className="font-mono">{dogId}</strong>.
+            No dog record matches the identifier <strong className="font-mono">{targetId}</strong>.
           </p>
           <Link
             href="/dashboard/dogs"
