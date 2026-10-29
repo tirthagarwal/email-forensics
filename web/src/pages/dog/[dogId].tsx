@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
+import { GetStaticPaths, GetStaticProps } from 'next'
 import Head from 'next/head'
 import Link from 'next/link'
+import { SEED_DOGS } from '../../lib/seedData'
 import {
   Shield,
   QrCode,
@@ -452,3 +454,29 @@ export default function PublicDogProfile() {
     </div>
   )
 }
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const paths: { params: { dogId: string } }[] = []
+
+  SEED_DOGS.forEach((d) => {
+    paths.push({ params: { dogId: d.dog_id } })
+    paths.push({ params: { dogId: d.id } })
+    if (d.qr_tag_id) {
+      paths.push({ params: { dogId: d.qr_tag_id } })
+    }
+  })
+
+  return {
+    paths,
+    fallback: false
+  }
+}
+
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+  return {
+    props: {
+      dogId: params?.dogId || null
+    }
+  }
+}
+
