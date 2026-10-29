@@ -1,19 +1,27 @@
 {
-  "name": "email-cryptographic-posture-dashboard",
-  "version": "2.0.0",
+  "name": "rescueai",
+  "version": "1.0.0",
+  "description": "RescueAI — AI-Powered Stray Dog Identification, QR Collar & Vaccination Management Platform",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 3000",
+    "dev": "next dev -p 3000 -H 0.0.0.0",
     "build": "next build",
-    "start": "next start -p 3000",
+    "start": "next start -p 3000 -H 0.0.0.0",
+    "serve": "npx serve out -l 3000",
     "lint": "next lint"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.118.0",
+    "@types/leaflet": "^1.9.22",
     "clsx": "^2.1.1",
+    "html5-qrcode": "^2.3.8",
+    "leaflet": "^1.9.4",
     "lucide-react": "^0.453.0",
     "next": "^14.2.15",
+    "qrcode.react": "^4.2.0",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-leaflet": "^4.2.1",
     "recharts": "^2.13.0",
     "tailwind-merge": "^2.5.4"
   },

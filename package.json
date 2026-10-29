@@ -1,0 +1,13 @@
+{
+  "name": "rescueai-workspace",
+  "version": "1.0.0",
+  "private": true,
+  "description": "RescueAI — AI-Powered Stray Dog Identification & Vaccination Management",
+  "scripts": {
+    "dev": "npm --prefix web run dev",
+    "build": "npm --prefix web run build",
+    "start": "npm --prefix web run start",
+    "serve": "npm --prefix web run serve",
+    "lint": "npm --prefix web run lint"
+  }
+}
