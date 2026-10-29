@@ -1,7 +1,7 @@
 {
-  "framework": "nextjs",
-  "buildCommand": "npm run build",
+  "buildCommand": "cd web && npm install && npm run build",
   "outputDirectory": "web/out",
   "cleanUrls": true,
-  "trailingSlash": false
+  "trailingSlash": false,
+  "installCommand": "npm install"
 }
